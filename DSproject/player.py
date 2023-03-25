@@ -42,8 +42,8 @@ class Player(pygame.sprite.Sprite):
 
         # horizontal
         self.pos_vector.x += self.direction_vector.x * self.speed * dt
-        self.rect.center.x = self.pos_vector.x
+        self.rect.centerx = self.pos_vector.x
 
         # vertical
         self.pos_vector.y += self.direction_vector.y * self.speed * dt
-        self.rect.center.y = self.pos_vector.y
+        self.rect.centery = self.pos_vector.y
