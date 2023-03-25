@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from player import Player
-
+from enemy import  Enemy
 
 class Level:
     def __init__(self):
@@ -21,3 +21,4 @@ class Level:
 
     def setup(self):
         self.player = Player((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), self.all_sprites)
+        self.enemy = Enemy((SCREEN_WIDTH / 3, SCREEN_HEIGHT / 3), self.all_sprites)
