@@ -1,11 +1,11 @@
 import pygame
+from player import Player
 from settings import *
 import random
 
-class Enemy(pygame.sprite.Sprite):
-    def __init__(self, pos, group):
-        super().__init__(group)
-
+class Enemy(Player):
+    def __init__(self, pos,group):
+        super(Enemy,self).__init__(pos,group)
         # general setup
         self.image = pygame.Surface((32, 64))
         self.image.fill('red')
@@ -14,35 +14,26 @@ class Enemy(pygame.sprite.Sprite):
         # movement
         self.direction_vector = pygame.math.Vector2(0, 0)
         self.pos_vector = pygame.math.Vector2(self.rect.center)
-        self.speed = 200  # can modify later
-        self.direction_vector.x = random.choice((-1, 1))
-        self.direction_vector.y = random.choice((-1, 1))
+        self.speed = 100  # can modify later
 
 
+        self.step=random.randint(500,1000)
 
     def update(self, dt):
 
-        self.randomMove(dt)
-
-    def randomMove(self, dt):  # needs to modify later
+        self.randMove(dt)
 
 
 
+    def randMove(self, dt):  # needs to modify later
+        if self.step<=0:
+            l=pygame.math.Vector2(-1, 0)
+            r = pygame.math.Vector2(1, 0)
+            u = pygame.math.Vector2(0, 1)
+            d = pygame.math.Vector2(0, -1)
+            self.direction_vector=random.choice((l,r,u,d))
+            self.step=random.randint(500,1000)
+        else:
+            self.move(dt)
+            self.step-=1
 
-        if self.rect.centerx >= SCREEN_WIDTH or self.rect.centerx <= 0:
-            self.direction_vector.x *=-1
-            self.direction_vector.y *= random.choice((-1, 1))
-        if self.rect.centery >= SCREEN_HEIGHT or self.rect.centery <= 0:
-            self.direction_vector.y *= -1
-            self.direction_vector.x *= random.choice((-1, 1))
-        if self.direction_vector.magnitude() > 0:
-            self.direction_vector = self.direction_vector.normalize()
-
-
-        # horizontal
-        self.pos_vector.x += self.direction_vector.x * self.speed * dt
-        self.rect.centerx = self.pos_vector.x
-
-        # vertical
-        self.pos_vector.y += self.direction_vector.y * self.speed * dt
-        self.rect.centery = self.pos_vector.y
