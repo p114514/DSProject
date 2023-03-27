@@ -1,7 +1,9 @@
 import pygame
 from settings import *
 from support import *
+
 from mapeditor import myMap
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos,movepath, group):
@@ -49,6 +51,7 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         self.input()
         self.move(dt)
+        self.animate(dt)
 
         self.animate(dt)
 
@@ -70,7 +73,10 @@ class Player(pygame.sprite.Sprite):
         self.animations = {'right': [], 'left': [], 'back': [], 'right_idle': [], 'left_idle': [], 'back_idle': []}
 
         for animation in self.animations.keys():
+
             full_path = r'./player/' + animation
+
+
             self.animations[animation] = import_folder(full_path)
 
     def animate(self, dt):
