@@ -1,7 +1,7 @@
 import pygame, sys
 from settings import *
 from level import Level
-
+from mapeditor import myMap
 
 class Game:
     def __init__(self):
@@ -10,6 +10,7 @@ class Game:
         pygame.display.set_caption('My name is Van')
         self.clock = pygame.time.Clock()
         self.level = Level()
+
 
     def run(self):
         while True:
@@ -20,6 +21,7 @@ class Game:
 
             dt = self.clock.tick() / 1000
             self.level.run(dt)
+
             pygame.display.update()
 
 
