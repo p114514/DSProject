@@ -37,8 +37,8 @@ class Level:
         Enemy_birth=random.choice(birthPos)
         birthPos.remove(Enemy_birth)
         print(Enemy_birth)
-        self.player = Player(Player_birth,movepath, self.all_sprites)
-        self.enemy = Enemy(Enemy_birth, movepath,self.all_sprites)
+        self.player = Player((0,0),movepath, self.all_sprites)
+       # self.enemy = Enemy(Enemy_birth, movepath,self.all_sprites)
 
 
 

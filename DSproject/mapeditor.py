@@ -11,9 +11,9 @@ class myMap():
         #modify maze
         self.mazerow=4;
         self.mazecol=4;
-        self.mazelist=np.array([[0,1,1,0],
-                                [1,1,0,0],
-                                [1,1,0,0],
+        self.mazelist=np.array([[1,1,1,1],
+                                [1,1,1,1],
+                                [1,1,0,1],
                                 [1,1,1,1]])
         self.MoveArea = [[1 for i in range(0,SCREEN_WIDTH)]for j in range(0,SCREEN_HEIGHT)]
         #define para
