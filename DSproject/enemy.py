@@ -8,7 +8,7 @@ class Enemy(Player):
 
         super(Enemy,self).__init__(pos,movepath,group)
         # general setup
-        self.image = pygame.Surface((32, 64))
+        self.image = pygame.Surface((10, 10))
         self.image.fill('red')
         self.rect = self.image.get_rect(center=pos)
         self.movepath=movepath

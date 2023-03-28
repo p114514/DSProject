@@ -30,15 +30,15 @@ class Level:
 
         movepath = self.map.getMoveArea().copy()
         birthPos  =self.map.getMovePos().copy()
-        print(self.map.getMoveArea()[319][179])
+        #print(self.map.getMoveArea()[319][179])
         Player_birth=random.choice(birthPos)
         birthPos.remove(Player_birth)
         print(Player_birth)
         Enemy_birth=random.choice(birthPos)
         birthPos.remove(Enemy_birth)
         print(Enemy_birth)
-        self.player = Player((0,0),movepath, self.all_sprites)
-       # self.enemy = Enemy(Enemy_birth, movepath,self.all_sprites)
+        self.player = Player(Player_birth,movepath, self.all_sprites)
+        self.enemy = Enemy(Enemy_birth, movepath,self.all_sprites)
 
 
 

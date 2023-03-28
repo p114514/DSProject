@@ -12,8 +12,8 @@ class myMap():
         self.mazerow=4;
         self.mazecol=4;
         self.mazelist=np.array([[1,1,1,1],
-                                [1,1,1,1],
-                                [1,1,0,1],
+                                [1,1,1,0],
+                                [1,0,0,1],
                                 [1,1,1,1]])
         self.MoveArea = [[1 for i in range(0,SCREEN_WIDTH)]for j in range(0,SCREEN_HEIGHT)]
         #define para
@@ -27,9 +27,10 @@ class myMap():
             for j in range(0,self.mazecol):
                 if self.mazelist[i][j]==0:
                   pygame.draw.rect(self.screen,(255,255,255),(self.cell_col[j],self.cell_row[i],self.xl,self.yl))
-                  for k in range(i*self.yl, self.xl):
-                      for p in range(j*self.xl , self.yl):
+                  for k in range(i *self.yl,(i+1)* self.yl):
+                      for p in range(j *self.xl,(j+1)* self.xl):
                          self.MoveArea[k][p]=0
+
 
 
 
