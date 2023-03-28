@@ -53,21 +53,43 @@ class Player(pygame.sprite.Sprite):
         self.move(dt)
         self.animate(dt)
 
-        self.animate(dt)
-
     def move(self, dt):  # needs to modify later
 
+        #predict
+        self.left=self.pos_vector+pygame.math.Vector2(-1, 0)* self.speed * dt
+        self.right = self.pos_vector + pygame.math.Vector2(1, 0)* self.speed * dt
+        self.up = self.pos_vector + pygame.math.Vector2(0, 1)* self.speed * dt
+        self.down = self.pos_vector + pygame.math.Vector2(0, -1)* self.speed * dt
+
+        dir_flag=[1,1,1,1]
+        dirlist=[pygame.math.Vector2(1,0),pygame.math.Vector2(-1,0),pygame.math.Vector2(0,1),pygame.math.Vector2(0,-1)]
+
+        noMove=[]
+        if self.right.x>=SCREEN_WIDTH:
+            dir_flag[0]=0
+        if self.left.x<0 :
+            dir_flag[1]=0
+        if self.up.y>=SCREEN_HEIGHT:
+            dir_flag[2]=0
+        if self.down.y<0 :
+            dir_flag[3]=0
         if self.direction_vector.magnitude() > 0:
             self.direction_vector = self.direction_vector.normalize()
 
+        for i in range(0,4):
+         if dir_flag[i]==0:
+          noMove.append(dirlist[i])
 
-        # horizontal
-        self.pos_vector.x += self.direction_vector.x * self.speed * dt
-        self.rect.centerx = self.pos_vector.x
 
-        # vertical
-        self.pos_vector.y += self.direction_vector.y * self.speed * dt
-        self.rect.centery = self.pos_vector.y
+        if  self.direction_vector not in noMove:#directions that we can move
+            # horizontal
+           self.pos_vector.x += self.direction_vector.x * self.speed * dt
+           self.rect.centerx = self.pos_vector.x
+
+            # vertical
+           self.pos_vector.y += self.direction_vector.y * self.speed * dt
+           self.rect.centery = self.pos_vector.y
+
 
     def import_assets(self):
         self.animations = {'right': [], 'left': [], 'back': [], 'right_idle': [], 'left_idle': [], 'back_idle': []}

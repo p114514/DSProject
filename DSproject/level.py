@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from settings import *
 from player import Player
@@ -10,8 +12,11 @@ class Level:
 
         # sprite groups
         self.all_sprites = pygame.sprite.Group()
+
         self.map = myMap(self.display_surface)
         # setup
+
+        self.map.drawWall()
         self.setup()
 
     def run(self, dt):
@@ -23,26 +28,17 @@ class Level:
 
     def setup(self):
 
-        movepath = self.map.getmaze().copy()
+        movepath = self.map.getMoveArea().copy()
+        birthPos  =self.map.getMovePos().copy()
+        print(self.map.getMoveArea()[319][179])
+        Player_birth=random.choice(birthPos)
+        birthPos.remove(Player_birth)
+        print(Player_birth)
+        Enemy_birth=random.choice(birthPos)
+        birthPos.remove(Enemy_birth)
+        print(Enemy_birth)
+        self.player = Player(Player_birth,movepath, self.all_sprites)
+        self.enemy = Enemy(Enemy_birth, movepath,self.all_sprites)
 
-        maze=self.map.getmaze().copy()
-        mazerow=self.map.getmazerow()
-        mazecol=self.map.getmazecol()
-        cellcol=self.map.getcell_col()
-        cellrow=self.map.getcell_row()
-        flag=1
-        for i in range(0, mazerow):
-            for j in range(0, mazecol):
-                if maze[i][j] == 1 and flag==1:
-                   self.player = Player((cellrow[i], cellcol[j]),movepath, self.all_sprites)
-                   maze[i][j]=0
-                   flag=0
-        flag=1
-        for i in range(0, mazerow):
-            for j in range(0, mazecol):
-                if maze[i][j] == 1 and flag==1:
-                   self.enemy = Enemy((cellrow[i], cellcol[j]), movepath,self.all_sprites)
-                   maze[i][j]=0
-                   flag=0
 
 
