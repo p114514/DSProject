@@ -3,8 +3,10 @@ import random
 import pygame
 from settings import *
 from player import Player
-from enemy import  Enemy
+from enemy import Enemy
 from mapeditor import myMap
+
+
 class Level:
     def __init__(self):
         # display surface
@@ -23,22 +25,18 @@ class Level:
         self.display_surface.fill('black')
         self.all_sprites.draw(self.display_surface)
         self.map.drawWall()
-        #map‘s level is above the sprite
+        # map‘s level is above the sprite
         self.all_sprites.update(dt)
 
     def setup(self):
-
         movepath = self.map.getMoveArea().copy()
-        birthPos  =self.map.getMovePos().copy()
+        birthPos = self.map.getMovePos().copy()
         print(self.map.getMoveArea()[319][179])
-        Player_birth=random.choice(birthPos)
+        Player_birth = random.choice(birthPos)
         birthPos.remove(Player_birth)
         print(Player_birth)
-        Enemy_birth=random.choice(birthPos)
+        Enemy_birth = random.choice(birthPos)
         birthPos.remove(Enemy_birth)
         print(Enemy_birth)
-        self.player = Player(Player_birth,movepath, self.all_sprites)
-        self.enemy = Enemy(Enemy_birth, movepath,self.all_sprites)
-
-
-
+        self.player = Player(Player_birth, movepath, self.all_sprites)
+        self.enemy = Enemy(Enemy_birth, movepath, self.all_sprites)

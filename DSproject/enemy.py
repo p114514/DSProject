@@ -45,4 +45,3 @@ class Enemy(Player):
         else:
             self.move(dt)
             self.step-=1
-
