@@ -8,13 +8,11 @@ import  numpy as np
 class myMap():
     def __init__(self,screen):
         super().__init__()
-        #modify maze
-        self.mazerow=4;
-        self.mazecol=4;
-        self.mazelist=np.array([[0,1,1,0],
-                                [1,1,0,0],
-                                [1,1,0,0],
-                                [1,1,1,1]])
+        #modify maz
+
+        self.mazelist=self.MazeGenerator()
+        self.mazerow=np.shape(self.mazelist)[0];
+        self.mazecol=np.shape(self.mazelist)[1];
         self.MoveArea = [[1 for i in range(0,SCREEN_WIDTH)]for j in range(0,SCREEN_HEIGHT)]
         #define para
         self.screen=screen
@@ -27,9 +25,10 @@ class myMap():
             for j in range(0,self.mazecol):
                 if self.mazelist[i][j]==0:
                   pygame.draw.rect(self.screen,(255,255,255),(self.cell_col[j],self.cell_row[i],self.xl,self.yl))
-                  for k in range(i*self.yl, self.xl):
-                      for p in range(j*self.xl , self.yl):
+                  for k in range(i *self.yl,(i+1)* self.yl):
+                      for p in range(j *self.xl,(j+1)* self.xl):
                          self.MoveArea[k][p]=0
+
 
 
 
@@ -54,6 +53,28 @@ class myMap():
         return self.cell_col
     def getcell_row(self):
         return self.cell_row
+    def MazeGenerator(self):
+        maze=-1*(np.array([[0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1],
+                [0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1],
+                [0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 1],
+                [0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1],
+                [1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 1],
+                [0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1],
+                [0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1],
+                [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1],
+                [0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1],
+                [0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0],
+                [0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1],
+                [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+                [0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1],
+                [1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                [0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0],
+                [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 0]])-1)
+        return maze
 
 
 

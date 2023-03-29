@@ -3,20 +3,21 @@ from player import Player
 from settings import *
 import random
 import  math
+
 class Enemy(Player):
     def __init__(self, pos,movepath,group):
 
         super(Enemy,self).__init__(pos,movepath,group)
         # general setup
-        self.image = pygame.Surface((32, 64))
+        self.image = pygame.Surface((10, 10))
         self.image.fill('red')
         self.rect = self.image.get_rect(center=pos)
         self.movepath=movepath
         # movement
         self.direction_vector = pygame.math.Vector2(0, 0)
         self.pos_vector = pygame.math.Vector2(self.rect.center)
-        self.speed = 400  # can modify later
-        self.step=500
+        self.speed = 100  # can modify later
+        self.step=50
 
     def update(self, dt):
 
@@ -41,7 +42,7 @@ class Enemy(Player):
             self.direction_vector=random.choice((l,r,u))
         if self.step<=0:
             self.direction_vector=random.choice((l,r,u,d))
-            self.step=500
+            self.step=100
         else:
             self.move(dt)
             self.step-=1
