@@ -3,6 +3,7 @@ from settings import *
 from level import Level
 from mapeditor import myMap
 
+
 class Game:
     def __init__(self):
         pygame.init()
