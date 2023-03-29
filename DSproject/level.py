@@ -34,11 +34,17 @@ class Level:
         Player_birth=random.choice(birthPos)
         birthPos.remove(Player_birth)
         print(Player_birth)
-        Enemy_birth=random.choice(birthPos)
-        birthPos.remove(Enemy_birth)
+        Enemy_birth=[]
+        n=10
+        for i in range(0,n):
+         Enemy_birth.append(random.choice(birthPos))
+         if birthPos.count(Enemy_birth)>0:
+            birthPos.remove(Enemy_birth)
         print(Enemy_birth)
-        self.player = Player(Player_birth,movepath, self.all_sprites)
-        self.enemy = Enemy(Enemy_birth, movepath,self.all_sprites)
+
+        self.player = Player((0,0),movepath, self.all_sprites)
+        for i in range(0, n):
+         locals()['self.enemy'+str(i)] = Enemy(Enemy_birth[i], movepath,self.all_sprites)
 
 
 

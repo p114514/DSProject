@@ -19,9 +19,9 @@ class Player(pygame.sprite.Sprite):
         # movement
         self.direction_vector = pygame.math.Vector2(0, 0)
         self.pos_vector = pygame.math.Vector2(self.rect.center)
-        self.speed = 100  # can modify later
+        self.speed = 200  # can modify later
         self.noMove = []
-        print(self.movepath)
+        #print(self.movepath)
     def input(self):
 
         keys = pygame.key.get_pressed()
@@ -54,10 +54,11 @@ class Player(pygame.sprite.Sprite):
         self.animate(dt)
 
     def move(self, dt):  # needs to modify later
-
+        if self.direction_vector.magnitude() > 0:
+            self.direction_vector = self.direction_vector.normalize()
         # predict
         prediretion = self.pos_vector + self.direction_vector * self.speed * dt
-
+        #print(self.direction_vector * self.speed * dt)
         dir_flag = 1
 
         dir_flag1 = 1
@@ -67,25 +68,24 @@ class Player(pygame.sprite.Sprite):
             dir_flag1 = 0
         #print(math.floor(self.prediretion.y),math.floor(self.prediretion.x))
 
-        if self.direction_vector.magnitude() > 0:
-            self.direction_vector = self.direction_vector.normalize()
+
         if dir_flag == 0:
             valid = False
-            if (self.direction_vector.x > 0 and self.pos_vector.x > SCREEN_WIDTH - 100) or (
-                    self.direction_vector.x < 0 and self.pos_vector.x < 100):
+            if (self.direction_vector.x > 0 and self.pos_vector.x > SCREEN_WIDTH - self.speed * dt) or (
+                    self.direction_vector.x < 0 and self.pos_vector.x < self.speed * dt):
                 valid = True
-            if (self.direction_vector.y > 0 and self.pos_vector.y > SCREEN_HEIGHT - 100) or (
-                    self.direction_vector.y < 0 and self.pos_vector.y < 100):
+            if (self.direction_vector.y > 0 and self.pos_vector.y > SCREEN_HEIGHT - self.speed * dt) or (
+                    self.direction_vector.y < 0 and self.pos_vector.y < self.speed * dt):
                 valid = True
             if valid and self.noMove.count(self.direction_vector) == 0:
                 self.noMove.append(self.direction_vector)
         if dir_flag1==0:
             valid1 = False
-            if (self.direction_vector.x > 0 and self.movepath[math.floor(prediretion.y)][math.floor(prediretion.x)+10]==0) or (
-                    self.direction_vector.x < 0 and self.movepath[math.floor(prediretion.y)][math.floor(prediretion.x)-10]==0):
+            if (self.direction_vector.x > 0 and self.movepath[math.floor(self.pos_vector.y)][math.floor(self.pos_vector.x+self.speed * dt)]==0) or (
+                    self.direction_vector.x < 0 and self.movepath[math.floor(self.pos_vector.y)][math.floor(self.pos_vector.x-self.speed * dt)]==0):
                 valid1 = True
-            if (self.direction_vector.y > 0 and self.movepath[math.floor(prediretion.y)+10][math.floor(prediretion.x)]==0) or (
-                    self.direction_vector.y < 0 and self.movepath[math.floor(prediretion.y)-10][math.floor(prediretion.x)]==0):
+            if (self.direction_vector.y > 0 and self.movepath[math.floor(self.pos_vector.y+self.speed * dt)][math.floor(self.pos_vector.x)]==0) or (
+                    self.direction_vector.y < 0 and self.movepath[math.floor(self.pos_vector.y-self.speed * dt)][math.floor(self.pos_vector.x)]==0):
                 valid1 = True
             if valid1 and self.noMove.count(self.direction_vector) == 0:
                 self.noMove.append(self.direction_vector)
