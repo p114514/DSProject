@@ -48,7 +48,8 @@ class Enemy(Player):
         if self.down.y < 0:
             self.direction_vector = random.choice((left_unit_vector, right_unit_vector, up_unit_vector))
         if self.step <= 0:
-            self.direction_vector = random.choice((left_unit_vector, right_unit_vector, up_unit_vector, down_unit_vector))
+            self.direction_vector = random.choice(
+                (left_unit_vector, right_unit_vector, up_unit_vector, down_unit_vector))
             self.step = 100
         else:
             self.move(dt)
