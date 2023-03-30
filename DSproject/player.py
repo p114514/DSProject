@@ -4,13 +4,13 @@ from support import *
 
 from mapeditor import myMap
 
-import  math
+import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos,movepath, group):
+    def __init__(self, pos, movepath, group):
         super().__init__(group)
-        self.movepath=movepath
+        self.movepath = movepath
         # sprite image initialization
         self.import_assets()
         self.status = 'right'
@@ -25,7 +25,8 @@ class Player(pygame.sprite.Sprite):
         self.pos_vector = pygame.math.Vector2(self.rect.center)
         self.speed = 200  # can modify later
         self.noMove = []
-        #print(self.movepath)
+        # print(self.movepath)
+
     def input(self):
 
         keys = pygame.key.get_pressed()
@@ -62,16 +63,15 @@ class Player(pygame.sprite.Sprite):
             self.direction_vector = self.direction_vector.normalize()
         # predict
         prediretion = self.pos_vector + self.direction_vector * self.speed * dt
-        #print(self.direction_vector * self.speed * dt)
+        # print(self.direction_vector * self.speed * dt)
         dir_flag = 1
 
         dir_flag1 = 1
         if prediretion.x >= SCREEN_WIDTH or prediretion.x < 0 or prediretion.y >= SCREEN_HEIGHT or prediretion.y < 0:
             dir_flag = 0
-        elif self.movepath[math.floor(prediretion.y)][math.floor(prediretion.x)]==0:
+        elif self.movepath[math.floor(prediretion.y)][math.floor(prediretion.x)] == 0:
             dir_flag1 = 0
-        #print(math.floor(self.prediretion.y),math.floor(self.prediretion.x))
-
+        # print(math.floor(self.prediretion.y),math.floor(self.prediretion.x))
 
         if dir_flag == 0:
             valid = False
@@ -83,17 +83,21 @@ class Player(pygame.sprite.Sprite):
                 valid = True
             if valid and self.noMove.count(self.direction_vector) == 0:
                 self.noMove.append(self.direction_vector)
-        if dir_flag1==0:
+        if dir_flag1 == 0:
             valid1 = False
-            if (self.direction_vector.x > 0 and self.movepath[math.floor(self.pos_vector.y)][math.floor(self.pos_vector.x+self.speed * dt)]==0) or (
-                    self.direction_vector.x < 0 and self.movepath[math.floor(self.pos_vector.y)][math.floor(self.pos_vector.x-self.speed * dt)]==0):
+            if (self.direction_vector.x > 0 and self.movepath[math.floor(self.pos_vector.y)][
+                math.floor(self.pos_vector.x + self.speed * dt)] == 0) or (
+                    self.direction_vector.x < 0 and self.movepath[math.floor(self.pos_vector.y)][
+                math.floor(self.pos_vector.x - self.speed * dt)] == 0):
                 valid1 = True
-            if (self.direction_vector.y > 0 and self.movepath[math.floor(self.pos_vector.y+self.speed * dt)][math.floor(self.pos_vector.x)]==0) or (
-                    self.direction_vector.y < 0 and self.movepath[math.floor(self.pos_vector.y-self.speed * dt)][math.floor(self.pos_vector.x)]==0):
+            if (self.direction_vector.y > 0 and self.movepath[math.floor(self.pos_vector.y + self.speed * dt)][
+                math.floor(self.pos_vector.x)] == 0) or (
+                    self.direction_vector.y < 0 and self.movepath[math.floor(self.pos_vector.y - self.speed * dt)][
+                math.floor(self.pos_vector.x)] == 0):
                 valid1 = True
             if valid1 and self.noMove.count(self.direction_vector) == 0:
                 self.noMove.append(self.direction_vector)
-       # print(self.prediretion)
+        # print(self.prediretion)
 
         if self.direction_vector not in self.noMove:  # directions that we can move
             # horizontal
@@ -104,6 +108,7 @@ class Player(pygame.sprite.Sprite):
             self.pos_vector.y += self.direction_vector.y * self.speed * dt
             self.rect.centery = self.pos_vector.y
             self.noMove = []
+
     # def move(self, dt):  # needs to modify later
     #     if self.direction_vector.magnitude() > 0:
     #         self.direction_vector = self.direction_vector.normalize()
@@ -133,15 +138,11 @@ class Player(pygame.sprite.Sprite):
     #        self.rect.centery = self.pos_vector.y
     #        self.noMove=[]
 
-
-
     def import_assets(self):
         self.animations = {'right': [], 'left': [], 'back': [], 'right_idle': [], 'left_idle': [], 'back_idle': []}
 
         for animation in self.animations.keys():
-
             full_path = r'./player/' + animation
-
 
             self.animations[animation] = import_folder(full_path)
 
