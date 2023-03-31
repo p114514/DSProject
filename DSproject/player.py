@@ -68,6 +68,7 @@ class Player(pygame.sprite.Sprite):
         self.collision("horizontal")
         self.rect.y += self.direction_vector.y * self.speed * dt
         self.collision("vertical")
+        self.pos_vector=pygame.math.Vector2(self.rect.center)
 
 
         # # predict
@@ -135,6 +136,10 @@ class Player(pygame.sprite.Sprite):
                     if self.direction_vector.y < 0:
                         self.rect.top = sp.rect.bottom
 
+    def getpos(self):
+        return self.pos_vector
+    def setPos(self,pos):
+        self.rect.center=pos
     def import_assets(self):
         self.animations = {'right': [], 'left': [], 'back': [], 'right_idle': [], 'left_idle': [], 'back_idle': []}
 
