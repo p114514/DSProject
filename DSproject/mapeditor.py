@@ -37,6 +37,9 @@ class myMap:
                         for p in range(j * self.xl, (j + 1) * self.xl):
                             self.MoveArea[k][p] = 0
 
+    def getBlock(self):
+
+        return self.block.getBlockGroup()
     def getMoveArea(self):
         return self.MoveArea
 

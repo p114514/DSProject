@@ -42,6 +42,6 @@ class Level:
                 birthPos.remove(Enemy_birth)
         print(Enemy_birth)
 
-        self.player = Player((0, 0), movepath, self.all_sprites)
+        self.player = Player((0, 0), movepath, self.all_sprites,self.map.getBlock())
         for i in range(0, n):
-            locals()['self.enemy' + str(i)] = Enemy(Enemy_birth[i], movepath, self.all_sprites)
+            locals()['self.enemy' + str(i)] = Enemy(Enemy_birth[i], movepath, self.all_sprites,self.map.getBlock())

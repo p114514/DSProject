@@ -8,9 +8,9 @@ from support import import_folder
 
 
 class Enemy(Player):
-    def __init__(self, pos, movepath, group):
+    def __init__(self, pos, movepath, group,obscatle_sprite):
 
-        super(Enemy, self).__init__(pos, movepath, group)
+        super(Enemy, self).__init__(pos, movepath, group,obscatle_sprite)
         # import assets and surface setup
         self.import_assets()
         self.status = 'right'
