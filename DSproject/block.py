@@ -19,10 +19,10 @@ class Block:
         self.block_surf = pygame.image.load(r'./block/block.png').convert_alpha()
 
 
-    def create_block_tile(self, matrix):
+    def create_block_tile(self, matrix,ry,rx):
         self.block_sprites.empty()
-        resizeW=SCREEN_WIDTH //len(matrix)
-        resizeH=SCREEN_HEIGHT//len(matrix[0])
+        resizeW=rx
+        resizeH=ry
         self.block_surf=pygame.transform.scale(self.block_surf, (resizeW,resizeH))
 
         for x in range(len(matrix)):
