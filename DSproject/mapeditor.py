@@ -21,6 +21,7 @@ class myMap:
 
         self.Room_unit_Row = 2
         self.Room_unit_Col = 2
+
         self.RoomRow = self.mazerow // self.Room_unit_Row
         self.RoomCol= self.mazecol // self.Room_unit_Col
         # define para
@@ -75,6 +76,7 @@ class myMap:
 
         return self.block.getBlockGroup()
     def getMoveArea(self):
+
         return self.MoveArea
 
     def getMovePos(self):

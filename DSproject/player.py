@@ -64,12 +64,30 @@ class Player(pygame.sprite.Sprite):
 
         if self.direction_vector.magnitude() > 0:
             self.direction_vector = self.direction_vector.normalize()
+        predictx= self.rect.x+self.direction_vector.x * self.speed * dt
+        predicty =  self.rect.y+self.direction_vector.y * self.speed * dt
+        #print(self.rect,(predictx,predicty))
 
-        self.rect.x += self.direction_vector.x * self.speed * dt
-        self.collision("horizontal")
-        self.rect.y += self.direction_vector.y * self.speed * dt
-        self.collision("vertical")
-        self.pos_vector=pygame.math.Vector2(self.rect.center)
+        if predictx<0 or predictx>=SCREEN_WIDTH-1:
+
+            #print(self.direction_vector.y)
+
+            self.rect.x += self.direction_vector.x * self.speed * dt
+            self.collision("horizontal")
+            self.pos_vector = pygame.math.Vector2(self.rect.center)
+        elif predicty < 0 or predicty >= SCREEN_HEIGHT-1:
+
+            #print(self.direction_vector.x)
+
+            self.rect.y += self.direction_vector.y * self.speed * dt
+            self.collision("vertical")
+            self.pos_vector = pygame.math.Vector2(self.rect.center)
+        else:
+            self.rect.x += self.direction_vector.x * self.speed * dt
+            self.collision("horizontal")
+            self.rect.y += self.direction_vector.y * self.speed * dt
+            self.collision("vertical")
+            self.pos_vector=pygame.math.Vector2(self.rect.center)
 
 
 
