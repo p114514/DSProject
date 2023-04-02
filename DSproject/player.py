@@ -8,7 +8,7 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, movepath, group,obstacle_sprite):
+    def __init__(self, pos, movepath, group, obstacle_sprite):
         super().__init__(group)
         self.movepath = movepath
         # sprite image initialization
@@ -25,8 +25,8 @@ class Player(pygame.sprite.Sprite):
         self.pos_vector = pygame.math.Vector2(self.rect.center)
         self.speed = 200  # can modify later
         # self.noMove = []
-        self.obstacle=obstacle_sprite
-        print(self.obstacle)
+        self.obstacle = obstacle_sprite
+        # print(self.obstacle)
         # print(self.movepath)
 
     def input(self):
@@ -64,69 +64,39 @@ class Player(pygame.sprite.Sprite):
 
         if self.direction_vector.magnitude() > 0:
             self.direction_vector = self.direction_vector.normalize()
-        self.rect.x += self.direction_vector.x * self.speed * dt
-        self.collision("horizontal")
-        self.rect.y += self.direction_vector.y * self.speed * dt
-        self.collision("vertical")
+        predictx = self.rect.x + self.direction_vector.x * self.speed * dt
+        predicty = self.rect.y + self.direction_vector.y * self.speed * dt
+        # print(self.rect,(predictx,predicty))
 
+        if predictx < 0 or predictx >= SCREEN_WIDTH - 1:
 
-        # # predict
-        # prediretion = self.pos_vector + self.direction_vector * self.speed * dt
-        # # print(self.direction_vector * self.speed * dt)
-        # dir_flag = 1
-        #
-        # dir_flag1 = 1
-        # if prediretion.x >= SCREEN_WIDTH or prediretion.x < 0 or prediretion.y >= SCREEN_HEIGHT or prediretion.y < 0:
-        #     dir_flag = 0
-        # elif self.movepath[math.floor(prediretion.y)][math.floor(prediretion.x)] == 0:
-        #     dir_flag1 = 0
-        # # print(math.floor(self.prediretion.y),math.floor(self.prediretion.x))
-        #
-        # if dir_flag == 0:
-        #     valid = False
-        #     if (self.direction_vector.x > 0 and self.pos_vector.x > SCREEN_WIDTH - self.speed * dt) or (
-        #             self.direction_vector.x < 0 and self.pos_vector.x < self.speed * dt):
-        #         valid = True
-        #     if (self.direction_vector.y > 0 and self.pos_vector.y > SCREEN_HEIGHT - self.speed * dt) or (
-        #             self.direction_vector.y < 0 and self.pos_vector.y < self.speed * dt):
-        #         valid = True
-        #     if valid and self.noMove.count(self.direction_vector) == 0:
-        #         self.noMove.append(self.direction_vector)
-        # if dir_flag1 == 0:
-        #     valid1 = False
-        #     if (self.direction_vector.x > 0 and self.movepath[math.floor(self.pos_vector.y)][
-        #         math.floor(self.pos_vector.x + self.speed * dt)] == 0) or (
-        #             self.direction_vector.x < 0 and self.movepath[math.floor(self.pos_vector.y)][
-        #         math.floor(self.pos_vector.x - self.speed * dt)] == 0):
-        #         valid1 = True
-        #     if (self.direction_vector.y > 0 and self.movepath[math.floor(self.pos_vector.y + self.speed * dt)][
-        #         math.floor(self.pos_vector.x)] == 0) or (
-        #             self.direction_vector.y < 0 and self.movepath[math.floor(self.pos_vector.y - self.speed * dt)][
-        #         math.floor(self.pos_vector.x)] == 0):
-        #         valid1 = True
-        #     if valid1 and self.noMove.count(self.direction_vector) == 0:
-        #         self.noMove.append(self.direction_vector)
-        # # print(self.prediretion)
-        #
-        # if self.direction_vector not in self.noMove:  # directions that we can move
-        #     # horizontal
-        #     self.pos_vector.x += self.direction_vector.x * self.speed * dt
-        #     self.rect.centerx = self.pos_vector.x
-        #
-        #     # vertical
-        #     self.pos_vector.y += self.direction_vector.y * self.speed * dt
-        #     self.rect.centery = self.pos_vector.y
-        #     self.noMove = []
+            # print(self.direction_vector.y)
 
+            self.rect.x += self.direction_vector.x * self.speed * dt
+            self.collision("horizontal")
+            self.pos_vector = pygame.math.Vector2(self.rect.center)
+        elif predicty < 0 or predicty >= SCREEN_HEIGHT - 1:
 
-    def collision(self,direction):
-        if direction=="horizontal":
-         for sp in self.obstacle:
-            if sp.rect.colliderect(self.rect):
-                if self.direction_vector.x>0:
-                    self.rect.right=sp.rect.left
-                if self.direction_vector.x<0:
-                    self.rect.left = sp.rect.right
+            # print(self.direction_vector.x)
+
+            self.rect.y += self.direction_vector.y * self.speed * dt
+            self.collision("vertical")
+            self.pos_vector = pygame.math.Vector2(self.rect.center)
+        else:
+            self.rect.x += self.direction_vector.x * self.speed * dt
+            self.collision("horizontal")
+            self.rect.y += self.direction_vector.y * self.speed * dt
+            self.collision("vertical")
+            self.pos_vector = pygame.math.Vector2(self.rect.center)
+
+    def collision(self, direction):
+        if direction == "horizontal":
+            for sp in self.obstacle:
+                if sp.rect.colliderect(self.rect):
+                    if self.direction_vector.x > 0:
+                        self.rect.right = sp.rect.left
+                    if self.direction_vector.x < 0:
+                        self.rect.left = sp.rect.right
         if direction == "vertical":
             for sp in self.obstacle:
                 if sp.rect.colliderect(self.rect):
@@ -134,6 +104,12 @@ class Player(pygame.sprite.Sprite):
                         self.rect.bottom = sp.rect.top
                     if self.direction_vector.y < 0:
                         self.rect.top = sp.rect.bottom
+
+    def getpos(self):
+        return self.pos_vector
+
+    def setPos(self, pos):
+        self.rect.center = pos
 
     def import_assets(self):
         self.animations = {'right': [], 'left': [], 'back': [], 'right_idle': [], 'left_idle': [], 'back_idle': []}
