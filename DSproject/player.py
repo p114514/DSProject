@@ -68,6 +68,7 @@ class Player(pygame.sprite.Sprite):
         predicty = self.rect.y + self.direction_vector.y * self.speed * dt
         # print(self.rect,(predictx,predicty))
 
+
         if predictx < 0 or predictx >= GAME_SCREEN_WIDTH - 1:
 
             # print(self.direction_vector.y)
@@ -75,7 +76,9 @@ class Player(pygame.sprite.Sprite):
             self.rect.x += self.direction_vector.x * self.speed * dt
             self.collision("horizontal")
             self.pos_vector = pygame.math.Vector2(self.rect.center)
+
         elif predicty < 0 or predicty >= GAME_SCREEN_HEIGHT - 1:
+
 
             # print(self.direction_vector.x)
 
