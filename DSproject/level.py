@@ -28,7 +28,9 @@ class Level:
         # print(self.map.getMoveArea())
 
     def run(self, dt):
+
         if self.player.rect.x <= 0 or self.player.rect.x >= GAME_SCREEN_WIDTH or self.player.rect.y <= 0 or self.player.rect.y >= GAME_SCREEN_HEIGHT:
+
             self.shiftRoom()
         self.display_surface.fill('black')
 
@@ -47,8 +49,10 @@ class Level:
             Enemy_birth = []
             abirthPos = []
             movepath = self.map.MoveArea
+
             for i in range(0, GAME_SCREEN_HEIGHT):
                 for j in range(0, GAME_SCREEN_WIDTH):
+
                     if movepath[i][j] == 1:
                         abirthPos.append((j, i))
 
@@ -87,11 +91,13 @@ class Level:
 
                 self.curRoom[0] -= 1
 
+
                 self.player.rect.x = GAME_SCREEN_WIDTH - 1
                 self.isShift = 1
             else:
                 self.player.rect.x = 0
         elif self.player.rect.x > GAME_SCREEN_WIDTH:
+
 
             if self.curRoom[0] < self.RR - 1:
 
@@ -100,11 +106,14 @@ class Level:
                 self.player.rect.x = 0
                 self.isShift = 1
             else:
+
                 self.player.rect.x = GAME_SCREEN_WIDTH
+
         elif self.player.rect.y < 0:
 
             if self.curRoom[1] > 0:
                 self.curRoom[1] -= 1
+
 
                 self.player.rect.y = GAME_SCREEN_HEIGHT - 1
                 self.isShift = 1
@@ -118,15 +127,19 @@ class Level:
                 self.player.rect.y = 0
                 self.isShift = 1
             else:
+
                 self.player.rect.y = GAME_SCREEN_HEIGHT
+
 
     def setup(self):
         movepath = self.map.getMoveArea()
 
         birthPos = []
 
+
         for i in range(0, GAME_SCREEN_HEIGHT):
             for j in range(0, GAME_SCREEN_WIDTH):
+
                 if movepath[i][j] == 1:
                     birthPos.append((j, i))
         self.Player_birth = birthPos[random.randint(0, len(birthPos))]
