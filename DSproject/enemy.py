@@ -6,10 +6,11 @@ import math
 
 from support import import_folder
 
-class Enemy(Player):
-    def __init__(self, pos, playerpos,movepath, group,obscatle_sprite):
 
-        super(Enemy, self).__init__(pos, movepath, group,obscatle_sprite)
+class Enemy(Player):
+    def __init__(self, pos, playerpos, movepath, group, obscatle_sprite):
+
+        super(Enemy, self).__init__(pos, movepath, group, obscatle_sprite)
         # import assets and surface setup
         self.import_assets()
         self.status = 'right'
@@ -30,8 +31,9 @@ class Enemy(Player):
         self.randMove(dt)
         self.animate(dt)
 
-    def setPlayerPos(self,playerpos):
-        self.playerpos=playerpos
+    def setPlayerPos(self, playerpos):
+        self.playerpos = playerpos
+
     def randMove(self, dt):  # needs to modify later
         # if self.Astep>0 and (self.pos_vector-self.playerpos).magnitude()<100:
         #     self.direction_vector=self.dir_list[self.temp-self.Astep]
@@ -42,11 +44,11 @@ class Enemy(Player):
         #     self.Astep=len(self.dir_list)
         #     self.temp=len(self.dir_list)
 
-        if (self.pos_vector-self.playerpos).magnitude()<100:
-            if (self.playerpos-self.pos_vector)!=pygame.math.Vector2(0, 0) :
-             self.direction_vector=(self.playerpos-self.pos_vector).normalize()
-            # print(self.direction_vector)
-             self.move(dt)
+        if (self.pos_vector - self.playerpos).magnitude() < 100:
+            if (self.playerpos - self.pos_vector) != pygame.math.Vector2(0, 0):
+                self.direction_vector = (self.playerpos - self.pos_vector).normalize()
+                # print(self.direction_vector)
+                self.move(dt)
         else:
             left_unit_vector = pygame.math.Vector2(-1, 0)
             right_unit_vector = pygame.math.Vector2(1, 0)
@@ -56,21 +58,21 @@ class Enemy(Player):
             self.right = self.pos_vector + pygame.math.Vector2(1, 0) * self.speed * dt
             self.up = self.pos_vector + pygame.math.Vector2(0, 1) * self.speed * dt
             self.down = self.pos_vector + pygame.math.Vector2(0, -1) * self.speed * dt
-            if self.right.x > SCREEN_WIDTH:
-               self.direction_vector = random.choice((left_unit_vector, up_unit_vector, down_unit_vector))
+            if self.right.x > GAME_SCREEN_WIDTH:
+                self.direction_vector = random.choice((left_unit_vector, up_unit_vector, down_unit_vector))
             if self.left.x < 0:
-               self.direction_vector = random.choice((right_unit_vector, up_unit_vector, down_unit_vector))
-            if self.up.y > SCREEN_HEIGHT:
-               self.direction_vector = random.choice((left_unit_vector, right_unit_vector, down_unit_vector))
+                self.direction_vector = random.choice((right_unit_vector, up_unit_vector, down_unit_vector))
+            if self.up.y > GAME_SCREEN_HEIGHT:
+                self.direction_vector = random.choice((left_unit_vector, right_unit_vector, down_unit_vector))
             if self.down.y < 0:
-               self.direction_vector = random.choice((left_unit_vector, right_unit_vector, up_unit_vector))
+                self.direction_vector = random.choice((left_unit_vector, right_unit_vector, up_unit_vector))
             if self.step <= 0:
-               self.direction_vector = random.choice(
-                (left_unit_vector, right_unit_vector, up_unit_vector, down_unit_vector))
-               self.step = 100
+                self.direction_vector = random.choice(
+                    (left_unit_vector, right_unit_vector, up_unit_vector, down_unit_vector))
+                self.step = 100
             else:
-               self.move(dt)
-               self.step -= 1
+                self.move(dt)
+                self.step -= 1
 
         if self.direction_vector.magnitude() == 0:
             self.status = self.status.split('_')[0] + '_idle'
