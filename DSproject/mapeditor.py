@@ -13,7 +13,9 @@ class myMap:
         self.mazeMatrix = self.MazeGenerator()
         self.mazerow = np.shape(self.mazeMatrix)[0]
         self.mazecol = np.shape(self.mazeMatrix)[1]
-        self.MoveArea = [[1 for i in range(0, SCREEN_WIDTH)] for j in range(0, SCREEN_HEIGHT)]
+
+        self.MoveArea = [[1 for i in range(0, GAME_SCREEN_WIDTH)] for j in range(0, GAME_SCREEN_HEIGHT)]
+
 
         self.Room_unit_Row = 2
         self.Room_unit_Col = 2
@@ -22,14 +24,16 @@ class myMap:
         self.RoomCol = self.mazecol // self.Room_unit_Col
         # define para
         self.screen = screen
-        self.xl = SCREEN_WIDTH // self.mazecol
-        self.yl = SCREEN_HEIGHT // self.mazerow
 
-        self.roomxl = SCREEN_WIDTH // self.RoomCol
-        self.roomyl = SCREEN_HEIGHT // self.RoomRow
+        self.xl = GAME_SCREEN_WIDTH // self.mazecol
+        self.yl = GAME_SCREEN_HEIGHT // self.mazerow
 
-        self.cell_row = range(0, SCREEN_HEIGHT, self.yl)
-        self.cell_col = range(0, SCREEN_WIDTH, self.xl)
+        self.roomxl = GAME_SCREEN_WIDTH // self.RoomCol
+        self.roomyl = GAME_SCREEN_HEIGHT // self.RoomRow
+
+        self.cell_row = range(0, GAME_SCREEN_HEIGHT, self.yl)
+        self.cell_col = range(0, GAME_SCREEN_WIDTH, self.xl)
+
 
         self.all_sprites = all_sprites
         self.block = Block(self.all_sprites)
@@ -51,9 +55,11 @@ class myMap:
         for i in range(0, self.RoomRow):
             for j in range(0, self.RoomCol):
                 if room[i][j] == 0:
-                    for k in range(max(i * self.roomyl - 10, 0), min((i + 1) * self.roomyl + 10, SCREEN_HEIGHT - 1)):
-                        for p in range(max(j * self.roomxl - 10, 0), min((j + 1) * self.roomxl + 10,
-                                                                         SCREEN_WIDTH - 1)):
+
+                    for k in range(max(i * self.roomyl - 32, 0), min((i + 1) * self.roomyl + 32, GAME_SCREEN_HEIGHT - 1)):
+                        for p in range(max(j * self.roomxl - 32, 0), min((j + 1) * self.roomxl + 32,
+                                                                         GAME_SCREEN_WIDTH - 1)):
+
                             self.MoveArea[k][p] = 0
 
     def toRoom(self, maze, i, j):
@@ -64,7 +70,9 @@ class myMap:
         return room
 
     def initMoveArea(self):
-        self.MoveArea = [[1 for i in range(0, SCREEN_WIDTH)] for j in range(0, SCREEN_HEIGHT)]
+
+        self.MoveArea = [[1 for i in range(0, GAME_SCREEN_WIDTH)] for j in range(0, GAME_SCREEN_HEIGHT)]
+
 
     def printRoom(self):
         print(self.pr)
@@ -82,8 +90,8 @@ class myMap:
 
     def getMovePos(self):
         movepos = []
-        for i in range(0, SCREEN_HEIGHT):
-            for j in range(0, SCREEN_WIDTH):
+        for i in range(0, GAME_SCREEN_HEIGHT):
+            for j in range(0, GAME_SCREEN_WIDTH):
                 if self.MoveArea[i][j] == 1:
                     movepos.append((i, j))
         return movepos

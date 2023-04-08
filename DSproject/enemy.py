@@ -58,11 +58,11 @@ class Enemy(Player):
             self.right = self.pos_vector + pygame.math.Vector2(1, 0) * self.speed * dt
             self.up = self.pos_vector + pygame.math.Vector2(0, 1) * self.speed * dt
             self.down = self.pos_vector + pygame.math.Vector2(0, -1) * self.speed * dt
-            if self.right.x > SCREEN_WIDTH:
+            if self.right.x > GAME_SCREEN_WIDTH:
                 self.direction_vector = random.choice((left_unit_vector, up_unit_vector, down_unit_vector))
             if self.left.x < 0:
                 self.direction_vector = random.choice((right_unit_vector, up_unit_vector, down_unit_vector))
-            if self.up.y > SCREEN_HEIGHT:
+            if self.up.y > GAME_SCREEN_HEIGHT:
                 self.direction_vector = random.choice((left_unit_vector, right_unit_vector, down_unit_vector))
             if self.down.y < 0:
                 self.direction_vector = random.choice((left_unit_vector, right_unit_vector, up_unit_vector))
