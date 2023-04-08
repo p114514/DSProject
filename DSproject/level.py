@@ -6,7 +6,7 @@ from player import Player
 from enemy import Enemy
 from mapeditor import myMap
 
-n = 5  # number of enemies
+n = 1  # number of enemies
 
 
 class Level:
@@ -36,6 +36,7 @@ class Level:
 
         self.map.drawRoom(self.curRoom[0], self.curRoom[1])
 
+
         playerpos = self.player.getpos()
         self.play_sprites.draw(self.display_surface)
         self.enemy_sprites.draw(self.display_surface)
@@ -54,7 +55,7 @@ class Level:
 
                     if movepath[i][j] == 1:
                         abirthPos.append((j, i))
-            print(abirthPos[0])
+
             # print(len(birthPos))
             for i in range(0, n):
                 a = abirthPos[random.randint(0, len(abirthPos))]
@@ -75,6 +76,12 @@ class Level:
         for i in range(0, n):
             globals()['self.enemy' + str(i)].setPlayerPos(playerpos)
 
+        #####设置攻击对象
+        self.player.setEnemy(self.enemy_sprites)
+        #####kill enemy#####
+        for sp in self.enemy_sprites:
+            if sp.HP<0:
+                self.enemy_sprites.remove(sp)
     def shiftRoom(self):
         ##情况比较多 用树考虑比较好？
         # print(self.player.rect)
@@ -146,6 +153,7 @@ class Level:
                 birthPos.remove(Enemy_birth)
 
         self.player = Player(self.Player_birth, movepath, self.play_sprites, self.map.getBlock())
+        self.player.setDisplaySur(self.display_surface)
         for i in range(0, n):
             globals()['self.enemy' + str(i)] = Enemy(Enemy_birth[i], self.player.getpos(), movepath,
                                                      self.enemy_sprites, self.map.getBlock())
