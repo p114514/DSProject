@@ -78,7 +78,7 @@ class myMap:
         print(self.pr)
 
     def getRoomRC(self):
-        return [self.RoomRow, self.RoomCol]
+        return [self.Room_unit_Row , self.Room_unit_Col]
 
     def getBlock(self):
 
