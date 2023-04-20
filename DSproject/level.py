@@ -78,10 +78,13 @@ class Level:
 
         #####设置攻击对象
         self.player.setEnemy(self.enemy_sprites)
+
         #####kill enemy#####
         for sp in self.enemy_sprites:
-            if sp.HP<0:
+            print(sp.HP)
+            if sp.HP<=0:
                 self.enemy_sprites.remove(sp)
+
     def shiftRoom(self):
         ##情况比较多 用树考虑比较好？
         # print(self.player.rect)

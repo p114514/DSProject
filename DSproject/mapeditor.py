@@ -17,11 +17,12 @@ class myMap:
         self.MoveArea = [[1 for i in range(0, GAME_SCREEN_WIDTH)] for j in range(0, GAME_SCREEN_HEIGHT)]
 
 
-        self.Room_unit_Row = 2
-        self.Room_unit_Col = 2
+        self.Room_unit_Row = 5
+        self.Room_unit_Col = 5
 
-        self.RoomRow = self.mazerow // self.Room_unit_Row
-        self.RoomCol = self.mazecol // self.Room_unit_Col
+
+        self.RoomRow = self.mazerow // self.Room_unit_Row+2##把边界围起来
+        self.RoomCol = self.mazecol // self.Room_unit_Col+2##把边界围起来
         # define para
         self.screen = screen
 
@@ -64,15 +65,24 @@ class myMap:
 
     def toRoom(self, maze, i, j):
         room = np.zeros((self.RoomRow, self.RoomCol))
-        for k in range(0, self.RoomRow):
-            for p in range(0, self.RoomCol):
-                room[k][p] = maze[k + i * self.RoomRow][p + j * self.RoomCol]
+        for k in range(1, self.RoomRow-1):
+            for p in range(1, self.RoomCol-1):
+                room[k][p] = maze[k-1 + i * (self.RoomRow-2)][p-1 + j * (self.RoomCol-2)]
+        for r in range(1,self.RoomRow-1):
+            if maze[r-1 + i * (self.RoomRow-2)][(j+1) * (self.RoomCol-2)-1]==1 and maze[r-1 + i * (self.RoomRow-2)][(j+1) * (self.RoomCol-2)]==1 and j<self.Room_unit_Col:
+                room[r][self.RoomCol-1]=1
+            if maze[r-1 + i * (self.RoomRow-2)][j * (self.RoomCol-2)-1]==1 and maze[r-1 + i * (self.RoomRow-2)][j * (self.RoomCol-2)]==1 and j>0:
+                room[r][0]=1
+        for c in range(1,self.RoomCol-1):
+            if maze[ (i+1) * (self.RoomRow-2)-1][c-1+j * (self.RoomCol-2)]==1 and maze[(i+1) * (self.RoomRow-2)][c-1+j * (self.RoomCol-2)]==1 and i<self.Room_unit_Row:
+                room[self.RoomRow-1][c]=1
+            if maze[ i * (self.RoomRow-2)-1][c-1+j * (self.RoomCol-2)]==1 and maze[  i * (self.RoomRow-2)][c-1+j * (self.RoomCol-2)]==1 and i>0:
+                room[0][c]=1
         return room
 
     def initMoveArea(self):
 
         self.MoveArea = [[1 for i in range(0, GAME_SCREEN_WIDTH)] for j in range(0, GAME_SCREEN_HEIGHT)]
-
 
     def printRoom(self):
         print(self.pr)
