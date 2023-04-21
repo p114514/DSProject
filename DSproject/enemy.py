@@ -8,9 +8,9 @@ from support import import_folder
 
 
 class Enemy(Player):
-    def __init__(self, pos, playerpos, movepath, group, obscatle_sprite):
+    def __init__(self, pos, playerpos, movepath, group, obscatle_sprite, trap_sprite):
 
-        super(Enemy, self).__init__(pos, movepath, group, obscatle_sprite)
+        super(Enemy, self).__init__(pos, movepath, group, obscatle_sprite, trap_sprite)
         # import assets and surface setup
         self.import_assets()
         self.status = 'right'
@@ -24,7 +24,7 @@ class Enemy(Player):
         self.playerpos = playerpos
         self.direction_vector = pygame.math.Vector2(0, 0)
         self.pos_vector = pygame.math.Vector2(self.rect.center)
-        self.speed = 100  # can modify later
+        self.speed = 120  # can modify later
         self.step = 50
 
     def update(self, dt):

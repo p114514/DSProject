@@ -8,21 +8,20 @@ import math
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, movepath, group, obstacle_sprite):
+    def __init__(self, pos, movepath, group, obstacle_sprite, trap_sprite):
         super().__init__(group)
 
         self.weapon_sprites = pygame.sprite.Group()
         self.WeaponList = []
 
-        self.handWeapon=Weapon(self.weapon_sprites)
+        self.handWeapon = Weapon(self.weapon_sprites)
         self.MagicList = []
         self.bag = []
 
-        #Status of player
-        self.HP=100
-        self.STR=100
-        self.DEF=50
-
+        # Status of player
+        self.HP = 100
+        self.STR = 100
+        self.DEF = 50
 
         self.movepath = movepath
         # sprite image initialization
@@ -38,12 +37,14 @@ class Player(pygame.sprite.Sprite):
         # movement
         self.direction_vector = pygame.math.Vector2(0, 0)
         self.pos_vector = pygame.math.Vector2(self.rect.center)
-        self.speed = 200  # can modify later
+        self.normal_speed = 180
+        self.reduced_speed = 90
+        self.speed = self.normal_speed  # can modify later
         # self.noMove = []
         self.obstacle = obstacle_sprite
         # print(self.obstacle)
         # print(self.movepath)
-
+        self.traps = trap_sprite
 
     def input(self):
 
@@ -68,7 +69,7 @@ class Player(pygame.sprite.Sprite):
             self.status = 'back'
             self.handWeapon.setWeapon('up', (self.rect.x, self.rect.y - 16))
         elif self.direction_vector.y == 1:
-            self.status='right'
+            self.status = 'right'
             self.handWeapon.setWeapon('down', (self.rect.x, self.rect.y + 16))
         elif self.direction_vector.x == 1:
             self.status = 'left'
@@ -82,14 +83,11 @@ class Player(pygame.sprite.Sprite):
             self.weapon_sprites.draw(self.display_surface)
             self.attack(self.handWeapon, self.enemy_sprite)
 
-
-
     def update(self, dt):
         self.input()
         self.move(dt)
         self.animate(dt)
-
-
+        self.stepontrap()
 
     def move(self, dt):  # needs to modify later
 
@@ -98,7 +96,6 @@ class Player(pygame.sprite.Sprite):
         predictx = self.rect.x + self.direction_vector.x * self.speed * dt
         predicty = self.rect.y + self.direction_vector.y * self.speed * dt
         # print(self.rect,(predictx,predicty))
-
 
         if predictx < 0 or predictx >= GAME_SCREEN_WIDTH - 1:
 
@@ -109,7 +106,6 @@ class Player(pygame.sprite.Sprite):
             self.pos_vector = pygame.math.Vector2(self.rect.center)
 
         elif predicty < 0 or predicty >= GAME_SCREEN_HEIGHT - 1:
-
 
             # print(self.direction_vector.x)
 
@@ -138,21 +134,36 @@ class Player(pygame.sprite.Sprite):
                         self.rect.bottom = sp.rect.top
                     if self.direction_vector.y < 0:
                         self.rect.top = sp.rect.bottom
-    def setEnemy(self,enemy):
-        self.enemy_sprite=enemy
-    def attack(self,AttackMethod,enemyGroup):
+
+    def stepontrap(self):
+        flag = False
+        for trap_sprite in self.traps:
+            if self.rect.colliderect(trap_sprite):
+                flag = True
+                break
+        if flag:
+            self.speed = self.reduced_speed
+        else:
+            self.speed = self.normal_speed
+
+    def setEnemy(self, enemy):
+        self.enemy_sprite = enemy
+
+    def attack(self, AttackMethod, enemyGroup):
         for sp in enemyGroup:
             if sp.rect.colliderect(AttackMethod.rect):
-                sp.HP-=self.STR-sp.DEF
-    #利用碰撞检测实现attack
+                sp.HP -= self.STR - sp.DEF
+
+    # 利用碰撞检测实现attack
 
     def getpos(self):
         return self.pos_vector
 
     def setPos(self, pos):
         self.rect.center = pos
-    def setDisplaySur(self,sur):
-        self.display_surface=sur
+
+    def setDisplaySur(self, sur):
+        self.display_surface = sur
 
     def import_assets(self):
         self.animations = {'right': [], 'left': [], 'back': [], 'right_idle': [], 'left_idle': [], 'back_idle': []}
