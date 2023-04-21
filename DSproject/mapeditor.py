@@ -13,15 +13,18 @@ class myMap:
         self.mazeMatrix = self.MazeGenerator()
         self.mazerow = np.shape(self.mazeMatrix)[0]
         self.mazecol = np.shape(self.mazeMatrix)[1]
+
         self.MoveArea = [[1 for i in range(0, GAME_SCREEN_WIDTH)] for j in range(0, GAME_SCREEN_HEIGHT)]
 
-        self.Room_unit_Row = 5
-        self.Room_unit_Col = 5
 
-        self.RoomRow = self.mazerow // self.Room_unit_Row+2##把边界围起来
-        self.RoomCol = self.mazecol // self.Room_unit_Col+2##把边界围起来
+        self.Room_unit_Row = 2
+        self.Room_unit_Col = 2
+
+        self.RoomRow = self.mazerow // self.Room_unit_Row
+        self.RoomCol = self.mazecol // self.Room_unit_Col
         # define para
         self.screen = screen
+
         self.xl = GAME_SCREEN_WIDTH // self.mazecol
         self.yl = GAME_SCREEN_HEIGHT // self.mazerow
 
@@ -30,6 +33,7 @@ class myMap:
 
         self.cell_row = range(0, GAME_SCREEN_HEIGHT, self.yl)
         self.cell_col = range(0, GAME_SCREEN_WIDTH, self.xl)
+
 
         self.all_sprites = all_sprites
         self.block = Block(self.all_sprites)
@@ -51,14 +55,14 @@ class myMap:
         for i in range(0, self.RoomRow):
             for j in range(0, self.RoomCol):
                 if room[i][j] == 0:
+
                     for k in range(max(i * self.roomyl - 32, 0), min((i + 1) * self.roomyl + 32, GAME_SCREEN_HEIGHT - 1)):
                         for p in range(max(j * self.roomxl - 32, 0), min((j + 1) * self.roomxl + 32,
                                                                          GAME_SCREEN_WIDTH - 1)):
+
                             self.MoveArea[k][p] = 0
 
     def toRoom(self, maze, i, j):
-        print(i,j)
-
         room = np.zeros((self.RoomRow, self.RoomCol))
         for k in range(1, self.RoomRow-1):
             for p in range(1, self.RoomCol-1):
@@ -72,22 +76,27 @@ class myMap:
                 room[r][0]=1
 
         for c in range(1,self.RoomCol-1):
-            print((i+1) * (self.RoomRow-2)-1,c-1+j * (self.RoomCol-2))
             if  i<self.Room_unit_Row-1:
               if maze[ (i+1) * (self.RoomRow-2)-1][c-1+j * (self.RoomCol-2)]==1 and maze[(i+1) * (self.RoomRow-2)][c-1+j * (self.RoomCol-2)]==1 :
                 room[self.RoomRow-1][c]=1
             if i>0:
               if maze[ i * (self.RoomRow-2)-1][c-1+j * (self.RoomCol-2)]==1 and maze[  i * (self.RoomRow-2)][c-1+j * (self.RoomCol-2)]==1 :
                 room[0][c]=1
+
         return room
 
     def initMoveArea(self):
+
         self.MoveArea = [[1 for i in range(0, GAME_SCREEN_WIDTH)] for j in range(0, GAME_SCREEN_HEIGHT)]
+
+
     def printRoom(self):
         print(self.pr)
 
     def getRoomRC(self):
+
         return [self.Room_unit_Row, self.Room_unit_Col]
+
 
     def getBlock(self):
 
