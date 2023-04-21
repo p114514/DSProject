@@ -45,6 +45,8 @@ class Player(pygame.sprite.Sprite):
         # print(self.obstacle)
         # print(self.movepath)
         self.traps = trap_sprite
+        self.invincible = False
+        self.last_hit_time = 0
 
     def input(self):
 
@@ -83,11 +85,22 @@ class Player(pygame.sprite.Sprite):
             self.weapon_sprites.draw(self.display_surface)
             self.attack(self.handWeapon, self.enemy_sprite)
 
+    def take_damage(self, damage):
+        if not self.invincible:
+            self.HP -= damage
+            self.invincible = True
+            self.last_hit_time = pygame.time.get_ticks()
+
+    def invincibility(self):
+        if pygame.time.get_ticks() - self.last_hit_time > 300:
+            self.invincible = False
+
     def update(self, dt):
         self.input()
         self.move(dt)
         self.animate(dt)
         self.stepontrap()
+        self.invincibility()
 
     def move(self, dt):  # needs to modify later
 
