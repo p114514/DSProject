@@ -57,19 +57,27 @@ class myMap:
                             self.MoveArea[k][p] = 0
 
     def toRoom(self, maze, i, j):
+        print(i,j)
+
         room = np.zeros((self.RoomRow, self.RoomCol))
         for k in range(1, self.RoomRow-1):
             for p in range(1, self.RoomCol-1):
                 room[k][p] = maze[k-1 + i * (self.RoomRow-2)][p-1 + j * (self.RoomCol-2)]
         for r in range(1,self.RoomRow-1):
-            if maze[r-1 + i * (self.RoomRow-2)][(j+1) * (self.RoomCol-2)-1]==1 and maze[r-1 + i * (self.RoomRow-2)][(j+1) * (self.RoomCol-2)]==1 and j<self.Room_unit_Col:
+            if j < self.Room_unit_Col-1 :
+             if maze[r-1 + i * (self.RoomRow-2)][(j+1) * (self.RoomCol-2)-1]==1 and maze[r-1 + i * (self.RoomRow-2)][(j+1) * (self.RoomCol-2)]==1:
                 room[r][self.RoomCol-1]=1
-            if maze[r-1 + i * (self.RoomRow-2)][j * (self.RoomCol-2)-1]==1 and maze[r-1 + i * (self.RoomRow-2)][j * (self.RoomCol-2)]==1 and j>0:
+            if j > 0:
+             if maze[r-1 + i * (self.RoomRow-2)][j * (self.RoomCol-2)-1]==1 and maze[r-1 + i * (self.RoomRow-2)][j * (self.RoomCol-2)]==1:
                 room[r][0]=1
+
         for c in range(1,self.RoomCol-1):
-            if maze[ (i+1) * (self.RoomRow-2)-1][c-1+j * (self.RoomCol-2)]==1 and maze[(i+1) * (self.RoomRow-2)][c-1+j * (self.RoomCol-2)]==1 and i<self.Room_unit_Row:
+            print((i+1) * (self.RoomRow-2)-1,c-1+j * (self.RoomCol-2))
+            if  i<self.Room_unit_Row-1:
+              if maze[ (i+1) * (self.RoomRow-2)-1][c-1+j * (self.RoomCol-2)]==1 and maze[(i+1) * (self.RoomRow-2)][c-1+j * (self.RoomCol-2)]==1 :
                 room[self.RoomRow-1][c]=1
-            if maze[ i * (self.RoomRow-2)-1][c-1+j * (self.RoomCol-2)]==1 and maze[  i * (self.RoomRow-2)][c-1+j * (self.RoomCol-2)]==1 and i>0:
+            if i>0:
+              if maze[ i * (self.RoomRow-2)-1][c-1+j * (self.RoomCol-2)]==1 and maze[  i * (self.RoomRow-2)][c-1+j * (self.RoomCol-2)]==1 :
                 room[0][c]=1
         return room
 
