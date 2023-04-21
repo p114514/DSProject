@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
 
         #Status of player
         self.HP=100
-        self.STR=60
+        self.STR=100
         self.DEF=50
 
 
@@ -143,8 +143,7 @@ class Player(pygame.sprite.Sprite):
     def attack(self,AttackMethod,enemyGroup):
         for sp in enemyGroup:
             if sp.rect.colliderect(AttackMethod.rect):
-
-                sp.HP-=max(self.STR-sp.DEF,0)
+                sp.HP-=self.STR-sp.DEF
     #利用碰撞检测实现attack
 
     def getpos(self):
