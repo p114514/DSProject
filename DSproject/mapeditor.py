@@ -17,11 +17,11 @@ class myMap:
         self.MoveArea = [[1 for i in range(0, GAME_SCREEN_WIDTH)] for j in range(0, GAME_SCREEN_HEIGHT)]
 
 
-        self.Room_unit_Row = 2
-        self.Room_unit_Col = 2
+        self.Room_unit_Row = 5
+        self.Room_unit_Col = 5
 
-        self.RoomRow = self.mazerow // self.Room_unit_Row
-        self.RoomCol = self.mazecol // self.Room_unit_Col
+        self.RoomRow = self.mazerow // self.Room_unit_Row+2
+        self.RoomCol = self.mazecol // self.Room_unit_Col+2
         # define para
         self.screen = screen
 
