@@ -2,15 +2,15 @@ import pygame
 from player import Player
 from settings import *
 import random
-import math
+from math import *
 
 from support import import_folder
 
 
 class Enemy(Player):
-    def __init__(self, pos, playerpos, movepath, group, obscatle_sprite):
+    def __init__(self, pos, playerpos, movepath, group, obscatle_sprite, trap_sprite):
 
-        super(Enemy, self).__init__(pos, movepath, group, obscatle_sprite)
+        super(Enemy, self).__init__(pos, movepath, group, obscatle_sprite, trap_sprite)
         # import assets and surface setup
         self.import_assets()
         self.status = 'right'
@@ -24,12 +24,14 @@ class Enemy(Player):
         self.playerpos = playerpos
         self.direction_vector = pygame.math.Vector2(0, 0)
         self.pos_vector = pygame.math.Vector2(self.rect.center)
-        self.speed = 100  # can modify later
+        self.speed = 120  # can modify later
         self.step = 50
 
     def update(self, dt):
         self.randMove(dt)
         self.animate(dt)
+
+        self.invincibility()
 
     def setPlayerPos(self, playerpos):
         self.playerpos = playerpos
@@ -44,7 +46,7 @@ class Enemy(Player):
         #     self.Astep=len(self.dir_list)
         #     self.temp=len(self.dir_list)
 
-        if (self.pos_vector - self.playerpos).magnitude() < 100:
+        if (self.pos_vector - self.playerpos).magnitude() < 500:
             if (self.playerpos - self.pos_vector) != pygame.math.Vector2(0, 0):
                 self.direction_vector = (self.playerpos - self.pos_vector).normalize()
                 # print(self.direction_vector)
@@ -89,8 +91,4 @@ class Enemy(Player):
             full_path = r'./enemy/' + animation
             self.animations[animation] = import_folder(full_path)
 
-    def animate(self, dt):
-        self.frame_index += 4 * dt
-        if self.frame_index >= len(self.animations[self.status]):
-            self.frame_index = 0
-        self.image = self.animations[self.status][int(self.frame_index)]
+
