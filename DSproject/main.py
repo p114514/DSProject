@@ -138,6 +138,7 @@ class InterFace:
         pygame.init()
 
     def basic_background(self):
+
         # 设置logo和界面标题
         game_icon = pygame.image.load(os.path.join('image', 'college_icon.png'))
         game_caption = 'Van'
