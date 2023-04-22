@@ -2,7 +2,7 @@ import pygame
 from player import Player
 from settings import *
 import random
-import math
+from math import *
 
 from support import import_folder
 
@@ -31,6 +31,8 @@ class Enemy(Player):
         self.randMove(dt)
         self.animate(dt)
 
+        self.invincibility()
+
     def setPlayerPos(self, playerpos):
         self.playerpos = playerpos
 
@@ -44,7 +46,7 @@ class Enemy(Player):
         #     self.Astep=len(self.dir_list)
         #     self.temp=len(self.dir_list)
 
-        if (self.pos_vector - self.playerpos).magnitude() < 100:
+        if (self.pos_vector - self.playerpos).magnitude() < 500:
             if (self.playerpos - self.pos_vector) != pygame.math.Vector2(0, 0):
                 self.direction_vector = (self.playerpos - self.pos_vector).normalize()
                 # print(self.direction_vector)
@@ -89,8 +91,4 @@ class Enemy(Player):
             full_path = r'./enemy/' + animation
             self.animations[animation] = import_folder(full_path)
 
-    def animate(self, dt):
-        self.frame_index += 4 * dt
-        if self.frame_index >= len(self.animations[self.status]):
-            self.frame_index = 0
-        self.image = self.animations[self.status][int(self.frame_index)]
+
