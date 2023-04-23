@@ -115,7 +115,7 @@ class Player(pygame.sprite.Sprite):
             ###mark for get damage
             self.getDMG = True
             self.last_hit_time = pygame.time.get_ticks()
-            self.getPushDir=self.direction_vector*-0.5
+            self.getPushDir=self.getPushDir=-pygame.math.Vector2(fromWhich.rect.x-self.rect.x,fromWhich.rect.y-self.rect.y)
 
 
     def invincibility(self):
@@ -191,6 +191,7 @@ class Player(pygame.sprite.Sprite):
         for sp in self.enemy_sprite:
             if sp.rect.colliderect(self.rect):
                 self.take_damage(sp.ATK-self.DEF,sp)
+                sp.take_damage(0,self)
 
 
     def stepontrap(self):
