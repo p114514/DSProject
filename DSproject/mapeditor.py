@@ -1,3 +1,5 @@
+import random
+
 from settings import *
 import pygame
 import numpy as np
@@ -57,12 +59,35 @@ class myMap:
         for i in range(0, self.RoomRow):
             for j in range(0, self.RoomCol):
                 if room[i][j] == 0:
-
                     for k in range(max(i * self.roomyl - 32, 0),
                                    min((i + 1) * self.roomyl + 32, GAME_SCREEN_HEIGHT - 1)):
                         for p in range(max(j * self.roomxl - 32, 0), min((j + 1) * self.roomxl + 32,
                                                                          GAME_SCREEN_WIDTH - 1)):
                             self.MoveArea[k][p] = 0
+    def getRoomBirthPos(self,RoomNO):
+        room = self.toRoom(self.mazeMatrix, RoomNO[0], RoomNO[1])
+        movepath = [[1 for i in range(0, GAME_SCREEN_WIDTH)] for j in range(0, GAME_SCREEN_HEIGHT)]
+        for i in range(0, self.RoomRow):
+            for j in range(0, self.RoomCol):
+                if room[i][j] == 0:
+                    for k in range(max(i * self.roomyl - 32, 0),
+                                   min((i + 1) * self.roomyl + 32, GAME_SCREEN_HEIGHT - 1)):
+                        for p in range(max(j * self.roomxl - 32, 0), min((j + 1) * self.roomxl + 32,
+                                                                         GAME_SCREEN_WIDTH - 1)):
+                            movepath[k][p] = 0
+        birthPos = []
+        err = 30
+        for i in range(err, GAME_SCREEN_HEIGHT - err):
+            for j in range(err, GAME_SCREEN_WIDTH - err):
+                if movepath[i][j] == 1 and (movepath[i + k][j + p] == 1 for k, p in [-err, err]):
+                    birthPos.append((j, i))
+
+        # print(Player_birth)
+        i=random.randint(0,len(birthPos)-1)
+        Enemy_birth=birthPos[i]
+        return Enemy_birth
+
+
 
     def toRoom(self, maze, i, j):
         room = np.zeros((self.RoomRow, self.RoomCol))
