@@ -10,6 +10,7 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         pygame.display.set_caption('My name is Van')
+
         self.clock = pygame.time.Clock()
         self.level = Level()
 
