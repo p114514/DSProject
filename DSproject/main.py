@@ -41,7 +41,7 @@ class Text:
         self.font_type = font_type
         self.font_size = font_size
 
-        font = pygame.font.Font(os.path.join('font', (self.font_type)), self.font_size)
+        font = pygame.font.Font(os.path.join('font', self.font_type), self.font_size)
         self.text_image = font.render(self.text, True, self.text_color).convert_alpha()
 
         self.text_width = self.text_image.get_width()
@@ -141,7 +141,7 @@ class ButtonColorSurface(ColorSurface):
             command(*args)
 
 
-class InterFace():
+class InterFace:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
