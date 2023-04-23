@@ -27,6 +27,8 @@ class Enemy(Player):
         self.speed = 120  # can modify later
         self.step = 50
 
+        self.roomNO=[0,0]
+
     def update(self, dt):
         self.randMove(dt)
         self.animate(dt)

@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         # Status of player
         self.HP = 100
 
+
         self.ATK = 51
         self.DEF = 50
         self.MP=100
@@ -109,17 +110,17 @@ class Player(pygame.sprite.Sprite):
 
     def take_damage(self, damage,fromWhich):
         if not self.invincible:
-            print(self.HP)
             self.HP -= damage
             self.invincible = True
             ###mark for get damage
             self.getDMG = True
             self.last_hit_time = pygame.time.get_ticks()
-            self.getPushDir=self.getPushDir=-pygame.math.Vector2(fromWhich.rect.x-self.rect.x,fromWhich.rect.y-self.rect.y)
+            self.getPushDir=-pygame.math.Vector2(fromWhich.rect.x-self.rect.x,fromWhich.rect.y-self.rect.y)
+
 
 
     def invincibility(self):
-        if pygame.time.get_ticks() - self.last_hit_time > 500:
+        if pygame.time.get_ticks() - self.last_hit_time > 100:
             self.invincible = False
             self.getDMG = False
 
@@ -133,9 +134,9 @@ class Player(pygame.sprite.Sprite):
         self.invincibility()
 
 
-        self.MP+=dt
+        self.MP+=dt*10
+
         if self.MP>100: self.MP=100
-        print(self.MP)
 
 
 
