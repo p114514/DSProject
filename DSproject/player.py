@@ -20,13 +20,16 @@ class Player(pygame.sprite.Sprite):
         self.handWeapon = Weapon(self.weapon_sprites)
         self.MagicList = ["Circle"]
         self.handMagic=self.MagicList[0]
-        self.bag = []
+
 
         # Status of player
         self.HP = 100
-        self.ATK = 100
+
+
+        self.ATK = 51
         self.DEF = 50
         self.MP=100
+
 
         # sprite image initialization
         self.import_assets()
@@ -40,6 +43,7 @@ class Player(pygame.sprite.Sprite):
         # movement
         self.direction_vector = pygame.math.Vector2(0, 0)
         self.pos_vector = pygame.math.Vector2(self.rect.center)
+
         self.normal_speed = 100
         self.reduced_speed = 90
         self.speed = self.normal_speed  # can modify later
@@ -94,6 +98,12 @@ class Player(pygame.sprite.Sprite):
             self.weapon_sprites.draw(self.display_surface)
             self.attack(self.handWeapon, self.enemy_sprite)
 
+    def take_damage(self, damage):
+        if not self.invincible:
+            self.HP -= damage
+            self.invincible = True
+            self.last_hit_time = pygame.time.get_ticks()
+
 
         if keys[pygame.K_2]:
             self.doMagic()
@@ -108,10 +118,12 @@ class Player(pygame.sprite.Sprite):
             self.getPushDir=-pygame.math.Vector2(fromWhich.rect.x-self.rect.x,fromWhich.rect.y-self.rect.y)
 
 
+
     def invincibility(self):
         if pygame.time.get_ticks() - self.last_hit_time > 100:
             self.invincible = False
             self.getDMG = False
+
 
 
     def update(self, dt):
@@ -121,8 +133,11 @@ class Player(pygame.sprite.Sprite):
         self.stepontrap()
         self.invincibility()
 
+
         self.MP+=dt*10
+
         if self.MP>100: self.MP=100
+
 
 
     def move(self, dt):  # needs to modify later
@@ -173,10 +188,12 @@ class Player(pygame.sprite.Sprite):
                     if self.direction_vector.y < 0:
                         self.rect.top = sp.rect.bottom
 
+
         for sp in self.enemy_sprite:
             if sp.rect.colliderect(self.rect):
                 self.take_damage(sp.ATK-self.DEF,sp)
                 sp.take_damage(0,self)
+
 
     def stepontrap(self):
         flag = False
@@ -195,6 +212,7 @@ class Player(pygame.sprite.Sprite):
     def attack(self, AttackMethod, enemyGroup):
         for sp in enemyGroup:
             if sp.rect.colliderect(AttackMethod.rect):
+
                 sp.take_damage(self.ATK - sp.DEF, AttackMethod)
 
     # 利用碰撞检测实现attack
