@@ -2,13 +2,16 @@ import math
 
 import pygame
 
-
 from settings import *
 from support import *
 from Weapon import Weapon
 from mapeditor import myMap
 
 from math import *
+
+pygame.mixer.init()
+hit1_sound = pygame.mixer.Sound("sound/hit.wav")
+hit1_sound.set_volume(0.5)
 
 
 class Player(pygame.sprite.Sprite):
@@ -19,17 +22,14 @@ class Player(pygame.sprite.Sprite):
         self.WeaponList = []
         self.handWeapon = Weapon(self.weapon_sprites)
         self.MagicList = ["Circle"]
-        self.handMagic=self.MagicList[0]
-
+        self.handMagic = self.MagicList[0]
 
         # Status of player
         self.HP = 100
 
-
         self.ATK = 51
         self.DEF = 50
-        self.MP=100
-
+        self.MP = 100
 
         # sprite image initialization
         self.import_assets()
@@ -52,18 +52,18 @@ class Player(pygame.sprite.Sprite):
         ###sprites from map
         self.obstacle = obstacle_sprite
         self.traps = trap_sprite
-        self.enemy_sprite=pygame.sprite.Group()
+        self.enemy_sprite = pygame.sprite.Group()
 
         self.invincible = False
-        self.getDMG=False
-        self.getPushDir= pygame.math.Vector2(0, 0)
+        self.getDMG = False
+        self.getPushDir = pygame.math.Vector2(0, 0)
         self.last_hit_time = 0
 
     def input(self):
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LSHIFT]:
-            self.speed*=2
+            self.speed *= 2
         if keys[pygame.K_UP]:
             self.direction_vector.y = -1
         elif keys[pygame.K_DOWN]:
@@ -97,6 +97,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_1]:
             self.weapon_sprites.draw(self.display_surface)
             self.attack(self.handWeapon, self.enemy_sprite)
+            hit1_sound.play()
 
     def take_damage(self, damage):
         if not self.invincible:
@@ -104,27 +105,22 @@ class Player(pygame.sprite.Sprite):
             self.invincible = True
             self.last_hit_time = pygame.time.get_ticks()
 
-
         if keys[pygame.K_2]:
             self.doMagic()
 
-    def take_damage(self, damage,fromWhich):
+    def take_damage(self, damage, fromWhich):
         if not self.invincible:
             self.HP -= damage
             self.invincible = True
             ###mark for get damage
             self.getDMG = True
             self.last_hit_time = pygame.time.get_ticks()
-            self.getPushDir=-pygame.math.Vector2(fromWhich.rect.x-self.rect.x,fromWhich.rect.y-self.rect.y)
-
-
+            self.getPushDir = -pygame.math.Vector2(fromWhich.rect.x - self.rect.x, fromWhich.rect.y - self.rect.y)
 
     def invincibility(self):
         if pygame.time.get_ticks() - self.last_hit_time > 100:
             self.invincible = False
             self.getDMG = False
-
-
 
     def update(self, dt):
         self.input()
@@ -133,17 +129,14 @@ class Player(pygame.sprite.Sprite):
         self.stepontrap()
         self.invincibility()
 
+        self.MP += dt * 10
 
-        self.MP+=dt*10
-
-        if self.MP>100: self.MP=100
-
-
+        if self.MP > 100: self.MP = 100
 
     def move(self, dt):  # needs to modify later
 
-        if self.getDMG==1:
-            self.direction_vector=self.getPushDir
+        if self.getDMG == 1:
+            self.direction_vector = self.getPushDir
 
         if self.direction_vector.magnitude() > 0:
             self.direction_vector = self.direction_vector.normalize()
@@ -188,12 +181,10 @@ class Player(pygame.sprite.Sprite):
                     if self.direction_vector.y < 0:
                         self.rect.top = sp.rect.bottom
 
-
         for sp in self.enemy_sprite:
             if sp.rect.colliderect(self.rect):
-                self.take_damage(sp.ATK-self.DEF,sp)
-                sp.take_damage(0,self)
-
+                self.take_damage(sp.ATK - self.DEF, sp)
+                sp.take_damage(0, self)
 
     def stepontrap(self):
         flag = False
@@ -212,28 +203,22 @@ class Player(pygame.sprite.Sprite):
     def attack(self, AttackMethod, enemyGroup):
         for sp in enemyGroup:
             if sp.rect.colliderect(AttackMethod.rect):
-
                 sp.take_damage(self.ATK - sp.DEF, AttackMethod)
 
     # 利用碰撞检测实现attack
     def doMagic(self):
-        if self.handMagic=="Circle":
+        if self.handMagic == "Circle":
             if self.MP >= 1:
-               self.MP-=1
-               xval = self.rect.x + cos(pygame.time.get_ticks()) * 50
-               yval = self.rect.y + sin(pygame.time.get_ticks()) * 50
-               pos = (xval, yval)
-               tempS = pygame.sprite.Group()
-               tempW = Weapon(tempS)
-               tempW.setWeapon('right', pos)
-               tempW.image = pygame.transform.rotate(tempW.image, -math.degrees(pygame.time.get_ticks()))
-               tempS.draw(self.display_surface)
-               self.attack(tempW, self.enemy_sprite)
-
-
-
-
-
+                self.MP -= 1
+                xval = self.rect.x + cos(pygame.time.get_ticks()) * 50
+                yval = self.rect.y + sin(pygame.time.get_ticks()) * 50
+                pos = (xval, yval)
+                tempS = pygame.sprite.Group()
+                tempW = Weapon(tempS)
+                tempW.setWeapon('right', pos)
+                tempW.image = pygame.transform.rotate(tempW.image, -math.degrees(pygame.time.get_ticks()))
+                tempS.draw(self.display_surface)
+                self.attack(tempW, self.enemy_sprite)
 
     def getpos(self):
         return self.pos_vector
@@ -256,15 +241,13 @@ class Player(pygame.sprite.Sprite):
         if self.frame_index >= len(self.animations[self.status]):
             self.frame_index = 0
         self.image = self.animations[self.status][int(self.frame_index)]
-        if self.getDMG==True :
-            value=sin(pygame.time.get_ticks())
-            if value>=0:
-                value=255
+        if self.getDMG == True:
+            value = sin(pygame.time.get_ticks())
+            if value >= 0:
+                value = 255
             else:
-                value=0
+                value = 0
             self.image.set_alpha(value)
 
         else:
             self.image.set_alpha(255)
-
-
