@@ -1,11 +1,17 @@
 import pygame
 import os
+from settings import *
+
+pygame.mixer.init()
+choose_sound = pygame.mixer.Sound("sound/y1650.wav")
+choose_sound.set_volume(0.9)
+
 
 class Color:
     # 自定义颜色
     ACHIEVEMENT = (220, 160, 87)
     VERSION = (220, 160, 87)
-
+    ACHIEVEMENT_a = (255, 153, 0, 200)
     # 固定颜色
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
@@ -82,6 +88,7 @@ class ButtonText(Text):
     def __init__(self, text: str, text_color: Color, font_type: str, font_size: int):
         super().__init__(text, text_color, font_type, font_size)
         self.rect = self.text_image.get_rect()
+        self.hovered = False
 
     def draw(self, surface: pygame.Surface, center_x, center_y):
         super().draw(surface, center_x, center_y)
@@ -90,6 +97,7 @@ class ButtonText(Text):
     def handle_event(self, command):
         self.hovered = self.rect.collidepoint(pygame.mouse.get_pos())
         if self.hovered:
+            choose_sound.play()
             command()
 
 
@@ -97,6 +105,7 @@ class ButtonImage(Image):
     def __init__(self, img_name: str, ratio=0.4):
         super().__init__(img_name, ratio)
         self.rect = self.image_scaled.get_rect()
+        self.hovered = False
 
     def draw(self, surface: pygame.Surface, center_x, center_y):
         super().draw(surface, center_x, center_y)
@@ -105,13 +114,16 @@ class ButtonImage(Image):
     def handle_event(self, command):
         self.hovered = self.rect.collidepoint(pygame.mouse.get_pos())
         if self.hovered:
+            choose_sound.play()
             command()
 
 
 class ButtonColorSurface(ColorSurface):
+    number = 1
     def __init__(self, color, width, height):
         super().__init__(color, width, height)
         self.rect = self.color_image.get_rect()
+        self.hovered = False
 
     def draw(self, surface: pygame.Surface, center_x, center_y):
         super().draw(surface, center_x, center_y)
@@ -120,4 +132,8 @@ class ButtonColorSurface(ColorSurface):
     def handle_event(self, command, *args):
         self.hovered = self.rect.collidepoint(pygame.mouse.get_pos())
         if self.hovered:
+            choose_sound.play()
+            ButtonColorSurface.number = 2
             command(*args)
+
+

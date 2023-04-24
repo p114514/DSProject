@@ -1,14 +1,19 @@
 import sys
+
+import pygame.mixer
+
 from settings import *
 from level import Level
 from DSproject.Interface_component import *
 
 
 class InterFace:
+
     def __init__(self):
+
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
-        self.size = SCREEN_WIDTH,SCREEN_HEIGHT
+        self.size = SCREEN_WIDTH, SCREEN_HEIGHT
         self.clock = pygame.time.Clock()
         self.level = Level()
         self.clock.tick(60)
@@ -18,9 +23,14 @@ class InterFace:
         self.button_mute = ButtonImage('rec.png', 0.5)
         self.button_full = ButtonImage('rec.png', 0.5)
         self.button_check = ButtonImage('rec_y.png', 0.5)
+        self.VPOS = 350
+        self.left_most = 300
+        self.right_most = 440
 
         pygame.mixer.init()
         pygame.mixer.music.load('music/Chris Lehman-Empyrean.mp3')
+
+        pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(-1, 0)
 
     def basic_background(self):
@@ -47,12 +57,13 @@ class InterFace:
         # 设置<基本背景>
         size, screen = self.basic_background()
         width, height = size
-
+        pygame.mixer.music.set_volume(0.2)
         # 设置<开始界面>文字和贴图
         #        Image('ink.png', ratio=0.4).draw(screen, width * 0.52, height * 0.67)  # 墨印
 
         button_game_start = ButtonText('开始游戏', Color.BLACK, 'aajht.ttf', 50)  # 开始游戏按钮
         button_game_option = ButtonText('选  项', Color.BLACK, 'aajht.ttf', 50)
+        ButtonColorSurface.number = 1
 
         while True:
             Image('bg3.jpg', 0.6).draw(screen, width / 2, height / 2)
@@ -91,9 +102,9 @@ class InterFace:
             pygame.display.update()
 
     def initial_attribute_interface(self):
-
+        pygame.mixer.music.set_volume(0.12)
         pygame.display.set_caption('Dungeon Tour')
-
+        ButtonColorSurface.number = 1
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -101,6 +112,7 @@ class InterFace:
                     sys.exit(114514)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     button_back.handle_event(self.start_interface)
+                    button_setting.handle_event(self.option_interface)
 
             dt = self.clock.tick() / 1000
 
@@ -108,6 +120,10 @@ class InterFace:
             Image('返回.png', ratio=0.38).draw(self.screen, SCREEN_WIDTH * 0.04, SCREEN_HEIGHT * 0.047)
             button_back = ButtonColorSurface(Color.TRANSPARENT, 26, 26)
             button_back.draw(self.screen, SCREEN_WIDTH * 0.04, SCREEN_HEIGHT * 0.047)
+
+            Image('setting1.png', ratio=0.22).draw(self.screen, SCREEN_WIDTH * 0.09, SCREEN_HEIGHT * 0.048)
+            button_setting = ButtonColorSurface(Color.TRANSPARENT, 26, 26)
+            button_setting.draw(self.screen, SCREEN_WIDTH * 0.09, SCREEN_HEIGHT * 0.048)
 
             pygame.display.update()
 
@@ -135,7 +151,6 @@ class InterFace:
         Text('全屏', Color.ACHIEVEMENT, 'xxyl.ttf', 38).draw(screen, width / 5, height * 0.30)
         Text('静音', Color.ACHIEVEMENT, 'xxyl.ttf', 38).draw(self.screen, SCREEN_WIDTH / 5, SCREEN_HEIGHT * 0.20)
 
-
         Text('音量大小', Color.ACHIEVEMENT, 'xxyl.ttf', 32).draw(screen, width / 5, height * 0.40)
         Text('制作人名单', Color.ACHIEVEMENT, 'xxyl.ttf', 40).draw(screen, width * 0.73, height * 0.20)
         Text('A', Color.ACHIEVEMENT, 'xxyl.ttf', 30).draw(screen, width * 0.73, height * 0.30)
@@ -145,22 +160,60 @@ class InterFace:
         Text('E', Color.ACHIEVEMENT, 'xxyl.ttf', 30).draw(screen, width * 0.73, height * 0.62)
 
     def option_interface(self):
+        pygame.mixer.music.set_volume(0.2)
+        volume_state = 0
         pygame.display.set_caption("Dungeon Tour")
         size, screen = self.option_background()
         width, height = size
         Text('静音', Color.ACHIEVEMENT, 'xxyl.ttf', 38).draw(screen, width / 5, height * 0.20)
         self.mute_judge()
 
+        # 绘制水平直线，参数依次为(surface, color, start_pos, end_pos, width)
+
+        # 绘制实心圆作为按钮，参数依次为(surface, color, center, radius, width)
+        pygame.draw.line(self.screen, Color.GREY, (self.left_most, 280), (self.right_most, 280), 21)
+        pygame.draw.circle(self.screen, Color.GREY, (self.left_most, 280), 10, width=0)
+        pygame.draw.circle(self.screen, Color.GREY, (self.right_most, 280), 10, width=0)
+        volume_button = pygame.draw.circle(self.screen, Color.ACHIEVEMENT_a, (self.VPOS, 280), 10, width=0)
+
         while True:
+
+            pos = pygame.mouse.get_pos()
+            if pygame.mouse.get_pressed()[0]:
+                if volume_button.collidepoint(pos):
+                    volume_state = 1
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit(114514)
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.button_back.handle_event(self.start_interface)
                     self.button_mute.handle_event(self.mutefunc)
                     self.button_full.handle_event(self.fullfunc)
+                    if ButtonColorSurface.number == 2:
+                        self.button_back.handle_event(self.initial_attribute_interface)
+                    else:
+                        self.button_back.handle_event(self.start_interface)
 
+                if event.type == pygame.MOUSEBUTTONUP and volume_state:
+                    volume_state = 0
+
+            if volume_state:
+                pygame.draw.line(self.screen, Color.GREY, (self.left_most, 280), (self.right_most, 280), 21)
+                pygame.draw.circle(self.screen, Color.GREY, (self.left_most, 280), 10, width=0)
+                pygame.draw.circle(self.screen, Color.GREY, (self.right_most, 280), 10, width=0)
+                volume_button = pygame.draw.circle(self.screen, Color.ACHIEVEMENT_a, (self.VPOS, 280), 10, width=0)
+                # 圆的位置与鼠标横坐标位置一致
+                self.VPOS = pos[0]
+                # 限制按键圆心位置在水平直线上
+                if self.VPOS > self.right_most:
+                    self.VPOS = self.right_most
+                elif self.VPOS < self.left_most:
+                    self.VPOS = self.left_most
+                # 实际音量值
+                difference = self.right_most - self.left_most
+                volume = (self.VPOS - self.left_most) / difference
+                pygame.mixer.music.set_volume(volume)
             pygame.display.update()
 
     def mutefunc(self):
@@ -172,12 +225,16 @@ class InterFace:
             pygame.mixer.music.stop()
 
     def mute_judge(self):
+        self.option_background_draw()
+
+        pygame.draw.line(self.screen, Color.GREY, (self.left_most, 280), (self.right_most, 280), 21)
+        pygame.draw.circle(self.screen, Color.GREY, (self.left_most, 280), 10, width=0)
+        pygame.draw.circle(self.screen, Color.GREY, (self.right_most, 280), 10, width=0)
+        volume_button = pygame.draw.circle(self.screen, Color.ACHIEVEMENT_a, (self.VPOS, 280), 10, width=0)
         if not self.mute:
-            self.option_background_draw()
             self.button_mute.draw(self.screen, SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.2)
 
         else:
-            self.option_background_draw()
             self.button_check.draw(self.screen, SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.2)
 
         if self.full_screen:
@@ -190,6 +247,12 @@ class InterFace:
         self.full_screen1()
 
     def full_screen1(self):
+        left_most = self.left_most
+        right_most = self.right_most
+        VPOS = self.VPOS
+        pygame.draw.line(self.screen, Color.GREY, (left_most, 280), (right_most, 280), 21)
+        pygame.draw.circle(self.screen, Color.GREY, (left_most, 280), 10, width=0)
+        pygame.draw.circle(self.screen, Color.GREY, (right_most, 280), 10, width=0)
         if not self.full_screen:
             self.mute_judge()
             self.button_full.draw(self.screen, SCREEN_WIDTH * 0.35, SCREEN_HEIGHT * 0.3)
