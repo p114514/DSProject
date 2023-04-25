@@ -1,11 +1,13 @@
 import pygame
 import os
 from settings import *
+from sound import *
 
 pygame.mixer.init()
 choose_sound = pygame.mixer.Sound("sound/y1650.wav")
-choose_sound.set_volume(0.9)
-
+choose_sound.set_volume(Sound.hit_volume)
+hit1_sound = pygame.mixer.Sound("sound/hit.wav")
+hit1_sound.set_volume(Sound.hit_volume)
 
 class Color:
     # 自定义颜色

@@ -1,17 +1,13 @@
 import math
 
 import pygame
-
+from Interface_component import *
 from settings import *
 from support import *
 from Weapon import Weapon
 from mapeditor import myMap
 
 from math import *
-
-pygame.mixer.init()
-hit1_sound = pygame.mixer.Sound("sound/hit.wav")
-hit1_sound.set_volume(0.5)
 
 
 class Player(pygame.sprite.Sprite):
@@ -97,7 +93,11 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_1]:
             self.weapon_sprites.draw(self.display_surface)
             self.attack(self.handWeapon, self.enemy_sprite)
+
+            hit1_sound.set_volume(Sound.hit_volume)
             hit1_sound.play()
+            print(hit1_sound.get_volume())
+            print(Sound.hit_volume)
 
     def take_damage(self, damage):
         if not self.invincible:
@@ -191,7 +191,7 @@ class Player(pygame.sprite.Sprite):
         for trap_sprite in self.traps:
             if self.rect.colliderect(trap_sprite):
                 flag = True
-                break
+                breakhi
         if flag:
             self.speed = self.reduced_speed
         else:
