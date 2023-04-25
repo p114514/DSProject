@@ -5,6 +5,7 @@ from Interface_component import *
 from settings import *
 from support import *
 from Weapon import Weapon
+from  Magic import *
 from mapeditor import myMap
 
 from math import *
@@ -16,26 +17,32 @@ class Player(pygame.sprite.Sprite):
 
         self.weapon_sprites = pygame.sprite.Group()
         self.WeaponList = []
-        self.handWeapon = Weapon(self.weapon_sprites)
-        self.MagicList = ["Circle"]
-        self.handMagic = self.MagicList[0]
+
+        self.magic_sprites= pygame.sprite.Group()
+        self.MagicList = ["Circle",'Shoot']
+        self.handMagic = self.MagicList[1]
+
 
         # Status of player
         self.HP = 100
 
-        self.ATK = 51
+
+        self.ATK = 100
+
         self.DEF = 50
         self.MP = 100
 
         # sprite image initialization
         self.import_assets()
         self.status = 'right'
+        self.weapon_status='left'
+        self.weapon_pos = {'right': [16,0], 'left': [-16,0], 'up': [0,-16], 'down':[0,16]}
+
         self.frame_index = 0
 
         # general setup
         self.image = self.animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.handWeapon.setWeapon('left', (self.rect.x - 16, self.rect.y))
         # movement
         self.direction_vector = pygame.math.Vector2(0, 0)
         self.pos_vector = pygame.math.Vector2(self.rect.center)
@@ -78,26 +85,29 @@ class Player(pygame.sprite.Sprite):
             self.status = self.status.split('_')[0] + '_idle'
         elif self.direction_vector.y == -1:
             self.status = 'back'
-            self.handWeapon.setWeapon('up', (self.rect.x, self.rect.y - 16))
+            self.weapon_status='up'
         elif self.direction_vector.y == 1:
             self.status = 'right'
-            self.handWeapon.setWeapon('down', (self.rect.x, self.rect.y + 16))
+            self.weapon_status='down'
         elif self.direction_vector.x == 1:
             self.status = 'left'
-            self.handWeapon.setWeapon('right', (self.rect.x + 16, self.rect.y))
+            self.weapon_status='right'
         else:
             self.status = 'right'
-            self.handWeapon.setWeapon('left', (self.rect.x - 16, self.rect.y))
+            self.weapon_status='left'
 
         ####武器、魔法待实现
         if keys[pygame.K_1]:
+            handWeapon = Weapon(self.weapon_sprites)
+            handWeapon.setWeapon(self.weapon_status, (self.rect.x + self.weapon_pos[self.weapon_status][0],
+                                                  self.rect.y + self.weapon_pos[self.weapon_status][1]))
             self.weapon_sprites.draw(self.display_surface)
-            self.attack(self.handWeapon, self.enemy_sprite)
 
-            hit1_sound.set_volume(Sound.hit_volume)
-            hit1_sound.play()
-            print(hit1_sound.get_volume())
-            print(Sound.hit_volume)
+            self.attack(handWeapon, self.enemy_sprite)
+        if keys[pygame.K_2]:
+            self.doMagic()
+
+
 
     def take_damage(self, damage):
         if not self.invincible:
@@ -105,8 +115,9 @@ class Player(pygame.sprite.Sprite):
             self.invincible = True
             self.last_hit_time = pygame.time.get_ticks()
 
-        if keys[pygame.K_2]:
-            self.doMagic()
+
+
+
 
     def take_damage(self, damage, fromWhich):
         if not self.invincible:
@@ -116,6 +127,11 @@ class Player(pygame.sprite.Sprite):
             self.getDMG = True
             self.last_hit_time = pygame.time.get_ticks()
             self.getPushDir = -pygame.math.Vector2(fromWhich.rect.x - self.rect.x, fromWhich.rect.y - self.rect.y)
+
+            hit1_sound.set_volume(Sound.hit_volume)
+            hit1_sound.play()
+
+
 
     def invincibility(self):
         if pygame.time.get_ticks() - self.last_hit_time > 100:
@@ -129,6 +145,11 @@ class Player(pygame.sprite.Sprite):
         self.stepontrap()
         self.invincibility()
 
+        if not self.weapon_sprites.empty():
+          for sp in self.weapon_sprites:
+            sp.setWeapon(self.weapon_status, (self.rect.x +self.weapon_pos[self.weapon_status][0], self.rect.y+self.weapon_pos[self.weapon_status][1]))
+        self.magic_sprites.draw(self.display_surface)
+        self.magic_sprites.update(dt)
         self.MP += dt * 10
 
         if self.MP > 100: self.MP = 100
@@ -191,7 +212,7 @@ class Player(pygame.sprite.Sprite):
         for trap_sprite in self.traps:
             if self.rect.colliderect(trap_sprite):
                 flag = True
-                breakhi
+
         if flag:
             self.speed = self.reduced_speed
         else:
@@ -219,6 +240,17 @@ class Player(pygame.sprite.Sprite):
                 tempW.image = pygame.transform.rotate(tempW.image, -math.degrees(pygame.time.get_ticks()))
                 tempS.draw(self.display_surface)
                 self.attack(tempW, self.enemy_sprite)
+
+        elif self.handMagic == "Shoot":
+                print("ok")
+                if self.MP >= 10:
+                    self.MP -= 10
+                magic=Magic(self.magic_sprites)
+                magic.setMagic(self.weapon_status,(self.rect.x +self.weapon_pos[self.weapon_status][0], self.rect.y+self.weapon_pos[self.weapon_status][1]),self.enemy_sprite,self.obstacle)
+
+
+
+
 
     def getpos(self):
         return self.pos_vector

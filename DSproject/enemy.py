@@ -26,13 +26,12 @@ class Enemy(Player):
         self.pos_vector = pygame.math.Vector2(self.rect.center)
         self.speed = 120  # can modify later
         self.step = 50
-
+        self.ATK=100
         self.roomNO=[0,0]
 
     def update(self, dt):
         self.randMove(dt)
         self.animate(dt)
-
         self.invincibility()
 
     def setPlayerPos(self, playerpos):
