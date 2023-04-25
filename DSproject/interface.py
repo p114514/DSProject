@@ -4,6 +4,7 @@ import pygame.mixer
 
 from settings import *
 from level import Level
+
 from Interface_component import *
 from sound import *
 
@@ -32,7 +33,9 @@ class InterFace:
         self.hit_volume = 0.4
 
         pygame.mixer.init()
-        pygame.mixer.music.load('music/0.mp3')
+
+        pygame.mixer.music.load('music/4.mp3')
+
 
         pygame.mixer.music.set_volume(self.bg_volume)
         pygame.mixer.music.play(-1, 0)
