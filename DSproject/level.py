@@ -6,7 +6,7 @@ from player import Player
 from enemy import Enemy
 from mapeditor import myMap
 
-n = 50  # number of enemies
+n = 10  # number of enemies
 
 
 class Level:
@@ -129,4 +129,3 @@ class Level:
                                                      self.enemy_sprites, self.map.getBlock(), self.map.getTrap())
             globals()['self.enemy' + str(i)].roomNO=roomNO
 
-            print(roomNO)
