@@ -129,4 +129,3 @@ class Level:
                                                      self.enemy_sprites, self.map.getBlock(), self.map.getTrap())
             globals()['self.enemy' + str(i)].roomNO=roomNO
 
-            print(roomNO)
